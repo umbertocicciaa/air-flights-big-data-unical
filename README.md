@@ -14,16 +14,20 @@ Export SPARK_LOCAL_IP
 export SPARK_LOCAL_IP="127.0.0.1"
 ```
 
-Install python dependencies
+Create virtual environment
+```sh
+python -m venv </path/to/new/virtual/environment>
+```
+
+Activate venv and install python dependencies
 
 ```sh
-cd src/
+source </path/to/new/virtual/environment>/bin/activate
 pip install -r requirements.txt
 ```
 
 Run
 
 ```sh
-cd src/
 python3 src/SimpleApp.py
 ```
