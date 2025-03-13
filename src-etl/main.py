@@ -1,13 +1,14 @@
 """main.py"""
+import json
 from pyspark.sql import SparkSession
 
 def etl_process(input_path, output_path):
+
     spark = SparkSession.builder \
-        .master('spark://spark:7077') \
-        .appName("SimpleApp") \
+        .appName("ETL") \
         .getOrCreate()
 
-    data = spark.read.csv(input_path, header=True, inferSchema=True)
+    data = spark.read.option("delimiter", ",").option("header", True).csv(input_path)
 
     selected_columns = [
         "Year", "Quarter", "Month", "DayofMonth", "DayOfWeek", "FlightDate", 
@@ -37,13 +38,14 @@ def etl_process(input_path, output_path):
         "Div5Airport", "Div5AirportID", "Div5AirportSeqID", "Div5WheelsOn", 
         "Div5TotalGTime", "Div5LongestGTime", "Div5WheelsOff", "Div5TailNum"
     ]
+    
     transformed_data = data.select(*selected_columns)
 
-    transformed_data.write.parquet(output_path)
+    transformed_data.write.parquet(output_path, mode='overwrite')
 
     spark.stop()
 
 if __name__ == "__main__":
-    input_path = "/opt/bitnami/spark/datasets/On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2013_6.csv"
-    output_path = "/opt/bitnami/spark/outputs/transformed_data.parquet"
+    input_path = "datasets"
+    output_path = "outputs"
     etl_process(input_path, output_path)
