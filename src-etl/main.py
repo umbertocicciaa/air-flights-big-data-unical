@@ -45,7 +45,18 @@ def etl_process(input_path, output_path):
 
     spark.stop()
 
+def read_parquet(parquet_path):
+    spark = SparkSession.builder \
+        .appName("ReadParquet") \
+        .getOrCreate()
+
+    data = spark.read.parquet(parquet_path)
+    data.show()
+
+    spark.stop()
+
 if __name__ == "__main__":
     input_path = "datasets"
     output_path = "outputs"
     etl_process(input_path, output_path)
+    read_parquet(output_path)
