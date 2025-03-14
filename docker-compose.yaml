@@ -30,3 +30,11 @@ services:
     volumes:
       - "./datasets/:/opt/bitnami/spark/datasets:rw"
       - "./outputs/:/opt/bitnami/spark/outputs:rw"
+
+  etl:
+    image: airflightsbe:latest
+    ports:
+      - '5001:5000'
+    depends_on:
+      - spark
+      - spark-worker
