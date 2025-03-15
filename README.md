@@ -1,33 +1,30 @@
-# air-flights-big-data-unical
+# Air-flights-big-data-unical
 
-## Run project
+## Project Overview
 
-To run the project, use the following command:
+This project is designed to analyze and visualize air flight data using big data technologies. It includes data processing, storage, and visualization components to provide insights into various aspects of air travel.
+
+## Prerequisites
+
+Before running the project, ensure you have the following installed:
+
+- Python 3.x
+- Docker
+- Docker Compose
+
+## Installation
+
+Clone the repository:
+
+```sh
+git clone https://github.com/yourusername/air-flights-big-data-unical.git
+cd air-flights-big-data-unical
+```
+
+## Usage
+
+To run the project locally, use Docker Compose:
 
 ```sh
 docker-compose up
-```
-
-Export SPARK_LOCAL_IP
-
-```sh
-export SPARK_LOCAL_IP="127.0.0.1"
-```
-
-Create virtual environment
-```sh
-python -m venv </path/to/new/virtual/environment>
-```
-
-Activate venv and install python dependencies
-
-```sh
-source </path/to/new/virtual/environment>/bin/activate
-pip install -r requirements.txt
-```
-
-Run
-
-```sh
-python3 src/SimpleApp.py
 ```
