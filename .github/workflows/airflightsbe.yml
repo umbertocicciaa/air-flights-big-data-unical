@@ -3,8 +3,8 @@ name: Build and Push Docker Image to GitHub Container Registry
 on:
   workflow_dispatch:
   push:
-    branches:
-      - main
+    paths:
+      - 'src-etl-microservice/**'
 
 jobs:
   build:
