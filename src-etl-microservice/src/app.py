@@ -16,7 +16,7 @@ def upload_file():
     
     if file and file.filename.endswith('.csv'):
         input_path = os.path.join('/tmp', file.filename)
-        output_path = os.path.join('/output/')
+        output_path = os.path.join('/mnt/shared-filesystem/outputs/'+file.filename+'/')
         file.save(input_path)
         
         etl_process(input_path, output_path)
