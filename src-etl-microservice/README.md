@@ -17,32 +17,29 @@ rest-api-project
 
 ## Requirements
 
-To run this project, you need to have Python installed along with the following packages:
-
-- Flask
-- PySpark
-
-You can install the required packages using pip:
-
-```
-pip install -r requirements.txt
-```
+To run this project, you need to have Docker installed.
 
 ## Running the API
 
-1. Navigate to the project directory:
-
+0. Enter in the directory:
+  
    ```
-   cd rest-api-project
-   ```
-
-2. Start the Flask application:
-
-   ```
-   python src/app.py
+   cd src-etl-microservice
    ```
 
-3. The API will be available at `http://127.0.0.1:5000`.
+1. Build the Docker image:
+
+   ```
+   docker build -t rest-api-project .
+   ```
+
+2. Run the Docker container:
+
+   ```
+   docker run -p 5000:5000 rest-api-project
+   ```
+
+3. The API will be available at `http://localhost:5000`.
 
 ## API Endpoint
 
@@ -62,7 +59,7 @@ pip install -r requirements.txt
 You can use tools like `curl` or Postman to test the API. Here’s an example using `curl`:
 
 ```
-curl -X POST -F "file=@path/to/your/file.csv" http://127.0.0.1:5000/upload
+curl -X POST -F "file=@path/to/your/file.csv" http://localhost:5000/upload
 ```
 
 This will return the Parquet file in response.
