@@ -3,3 +3,4 @@ outputs
 .venv
 spark*
 shared-filesystem
+.vscode
