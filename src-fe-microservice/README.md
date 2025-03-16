@@ -39,6 +39,12 @@ streamlit-microservice
    streamlit run src/app.py
    ```
 
+4. Alternatively, you can use Docker to run the application:
+   ```
+   docker build -t airflightsfe:latest .
+   docker run -p 8501:8501 -v ./shared-filesystem:/app/shared-filesystem airflightsfe:latest
+   ```
+
 ## Usage Guidelines
 
 - Navigate to the home page to get an overview of the application and its features.

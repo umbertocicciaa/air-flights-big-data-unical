@@ -30,14 +30,35 @@ To run this project, you need to have Docker installed.
 1. Build the Docker image:
 
    ```
-   docker build -t rest-api-project .
+   docker build -t airflightsbe:latest .
    ```
 
 2. Run the Docker container:
 
-   ```
-   docker run -p 5000:5000 rest-api-project
-   ```
+   **Pull Docker Images**:
+      Ensure you have the latest Docker images for Spark and Spark Worker. You can pull them from Docker Hub or your preferred Docker registry.
+      ```bash
+         docker pull bitnami/spark:latest
+         docker pull bitnami/spark-worker:latest
+      ```
+
+   **Run Spark Master Container**:
+      Start the Spark Master container. This container will act as the master node for your Spark cluster.
+      ```bash
+         docker run -d --name spark-master -h spark-master -p 7077:7077 -p 8080:8080 bitnami/spark:latest
+      ```
+
+   **Run Spark Worker Containers**:
+      Start one or more Spark Worker containers. These containers will connect to the Spark Master and act as worker nodes in your Spark cluster.
+      ```bash
+         docker run -d --name spark-worker-1 --link spark-master:spark-master -e SPARK_WORKER_CORES=2 -e SPARK_WORKER_MEMORY=2G bitnami/spark-worker:latest
+         docker run -d --name spark-worker-2 --link spark-master:spark-master -e SPARK_WORKER_CORES=2 -e SPARK_WORKER_MEMORY=2G bitnami/spark-worker:latest
+      ```
+
+   **Run application**:
+      ```
+      docker run -p 5000:5000 -v ./shared-filesystem:/mnt/shared-filesystem/:rw airflightsbe:latest
+      ```
 
 3. The API will be available at `http://localhost:5000`.
 
