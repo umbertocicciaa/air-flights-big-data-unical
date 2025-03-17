@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-file_path = "shared-filesystem/outputs/On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2013_3.csv/"
+file_path = "/mnt/shared-filesystem/outputs/On_Time_Reporting_Carrier_On_Time_Performance_(1987_present)_2013_3.csv/"
 def load_parquet_data():
     try:
         data = pd.read_parquet(file_path)
