@@ -34,6 +34,16 @@ services:
       - spark-worker
     volumes:
       - ./shared-filesystem:/mnt/shared-filesystem:rw
+
+  frontend:
+    image: airflightsfe:latest
+    depends_on:
+      - etl
+    volumes:
+      - ./shared-filesystem:/mnt/shared-filesystem:rw
+    ports:
+      - '8501:8501'
+
   redis:
     image: redis
     ports:
