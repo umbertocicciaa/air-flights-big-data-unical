@@ -1,7 +1,8 @@
 import streamlit as st
 
+
 def main():
-    st.title("Welcome to the Data Exploration App")
+    st.title("Home")
     st.write("This application allows you to explore and analyze data in Parquet format.")
     
     st.header("Navigation")

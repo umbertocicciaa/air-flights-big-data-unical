@@ -36,7 +36,7 @@ services:
       - ./shared-filesystem:/mnt/shared-filesystem:rw
 
   frontend:
-    image: ghcr.io/umbertocicciaa/airflightsfe:latest
+    image: airflightsfe:latest
     depends_on:
       - etl
     volumes:

@@ -2,7 +2,6 @@ import streamlit as st
 from utils.data_loader import load_parquet_data
 
 def analyze_data(data):
-    st.title("Data Analysis")
     
     if st.checkbox("Show Summary Statistics"):
         st.write(data.describe())
