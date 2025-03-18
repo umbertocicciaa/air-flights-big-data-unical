@@ -1,0 +1,18 @@
+BACKEND
+DONE # tutto in una cartella i csv
+DONE # etl
+DONE # streamlit page/ multipage
+DONE # query componibili
+DONE # CICD Piepline for microservice
+DONE # cambiare architettura backend in mvc, 
+DONE # preprocessing
+
+FRONTEND
+# cambiare in service la redis cli
+
+# streamlit cache / redis cache
+? # grafici correlazione / dispersione
+
+
+# cluster kubernates
+# ml ?
