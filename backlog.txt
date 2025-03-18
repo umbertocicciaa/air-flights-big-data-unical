@@ -13,6 +13,6 @@ FRONTEND
 # streamlit cache / redis cache
 ? # grafici correlazione / dispersione
 
-
+FUTURE
 # cluster kubernates
 # ml ?
