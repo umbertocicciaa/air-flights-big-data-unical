@@ -2,8 +2,18 @@ import pickle
 import pandas as pd
 from .redis_connection import init_redis
 import logging
+import os
 
-logging.basicConfig(level=logging.INFO)
+os.makedirs("/mnt/shared-filesystem/logs", exist_ok=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('/mnt/shared-filesystem/logs/fe_data_loader.log'),
+        logging.StreamHandler()
+    ]
+)
 logger = logging.getLogger(__name__)
 
 file_path = "/mnt/shared-filesystem/outputs/"

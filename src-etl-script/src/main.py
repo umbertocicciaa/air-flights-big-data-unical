@@ -2,8 +2,18 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, trim, to_date
 import logging
+import os
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+os.makedirs("/mnt/shared-filesystem/logs", exist_ok=True)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('/mnt/shared-filesystem/logs/etl_script_process.log'),
+        logging.StreamHandler()
+    ]
+)
 logger = logging.getLogger(__name__)
 
 def preprocess_data(df):
@@ -92,6 +102,10 @@ def read_parquet(parquet_path):
 
     data = spark.read.parquet(parquet_path)
     data.show()
+
+    logger.info(f"Data: {data.collect()}")
+    logger.info(f"Data schema: {data.schema}")
+    logger.info(f"Total records: {data.count()}")
 
     spark.stop()
 
