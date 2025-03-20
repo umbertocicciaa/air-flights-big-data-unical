@@ -71,10 +71,10 @@ def etl_process(input_path, output_path):
         df = spark.read.csv(input_path, header=True, inferSchema=True)
         logger.info(f"CSV file read successfully from {input_path}")
         
-        df = preprocess_data(df)
+        #df = preprocess_data(df)
         logger.info("Data preprocessing completed")
 
-        df.write.parquet(output_path)
+        df.write.mode("overwrite").parquet(output_path)
         logger.info(f"Data written to Parquet format at {output_path}")
         
     except Exception as e:

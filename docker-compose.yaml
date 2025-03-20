@@ -9,7 +9,7 @@ services:
       - SPARK_SSL_ENABLED=no
       - SPARK_USER=spark
     ports:
-      - '8081:8080'
+      - '8080:8080'
       - '7077:7077'
 
   spark-worker:
@@ -39,6 +39,10 @@ services:
     image: ghcr.io/umbertocicciaa/airflightsfe:latest
     depends_on:
       - etl
+      - redis
+      - script
+      - spark
+      - spark-worker
     volumes:
       - ./shared-filesystem:/mnt/shared-filesystem:rw
     ports:

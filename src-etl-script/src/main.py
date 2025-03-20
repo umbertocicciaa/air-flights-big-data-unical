@@ -72,7 +72,7 @@ def etl_process(input_path, output_path):
             .getOrCreate()
         logger.info("Spark session created successfully")
         
-        df = spark.read.csv(input_path, header=True, inferSchema=True)
+        #df = spark.read.csv(input_path, header=True)
         logger.info(f"CSV file read successfully from {input_path}")
         
         df = preprocess_data(df)
