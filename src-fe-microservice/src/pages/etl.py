@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import requests
-from utils.redis_connection import init_redis
+from services.redis_connection import init_redis
 
 st.title("Air Flights ETL Process")
 

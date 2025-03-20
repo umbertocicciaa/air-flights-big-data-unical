@@ -1,5 +1,5 @@
 import streamlit as st
-from utils.data_loader import load_parquet_data
+from services.data_loader import load_parquet_data
 
 def explore_data():
     st.title("Explore Data")

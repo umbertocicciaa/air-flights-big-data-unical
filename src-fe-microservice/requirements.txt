@@ -6,3 +6,4 @@ matplotlib
 seaborn
 scikit-learn
 redis
+pyspark==3.5.5

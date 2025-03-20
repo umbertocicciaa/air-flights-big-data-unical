@@ -3,7 +3,7 @@ import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-from utils.data_loader import load_parquet_data
+from services.data_loader import load_parquet_data
 
 st.title("Correlation Graphs")
 
