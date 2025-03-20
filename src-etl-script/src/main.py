@@ -1,7 +1,4 @@
 """main.py"""
-import json
-from pyspark.sql import SparkSession
-
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, trim, to_date
 import logging

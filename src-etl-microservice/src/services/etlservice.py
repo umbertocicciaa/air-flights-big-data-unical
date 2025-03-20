@@ -1,4 +1,3 @@
-import os
 from repositories.etlrepository import EtlRepository
 import logging
 from flask import jsonify

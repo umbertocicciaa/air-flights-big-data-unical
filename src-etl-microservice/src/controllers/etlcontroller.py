@@ -1,5 +1,5 @@
 import logging
-from flask import Blueprint, Flask, app, request, jsonify
+from flask import Blueprint, request, jsonify
 from services.etlservice import EtlService
 
 etl_blueprint = Blueprint('etl', __name__)
