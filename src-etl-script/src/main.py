@@ -72,10 +72,10 @@ def etl_process(input_path, output_path):
             .getOrCreate()
         logger.info("Spark session created successfully")
         
-        #df = spark.read.csv(input_path, header=True)
+        df = spark.read.csv(input_path, header=True)
         logger.info(f"CSV file read successfully from {input_path}")
         
-        df = preprocess_data(df)
+        #df = preprocess_data(df)
         logger.info("Data preprocessing completed")
 
         df.write.mode("overwrite").parquet(output_path)
