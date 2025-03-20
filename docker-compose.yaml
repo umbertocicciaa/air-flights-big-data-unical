@@ -48,7 +48,6 @@ services:
     ports:
       - '8501:8501'
 
-
   script:
     image: ghcr.io/umbertocicciaa/airflightsscript:latest
     depends_on:
