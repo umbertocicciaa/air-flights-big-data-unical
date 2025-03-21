@@ -1,8 +1,8 @@
 """main.py"""
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, trim, to_date
 import logging
 import os
+from hdfs import InsecureClient
 
 os.makedirs("/mnt/shared-filesystem/logs", exist_ok=True)
 
@@ -16,65 +16,43 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-def preprocess_data(df):
-    df = df.dropna()
-    logger.info("Dropped rows with null values")
-    
-    df = df.dropDuplicates()
-    logger.info("Removed duplicate rows")
-    
-    df = df.withColumn("FlightDate", to_date(col("FlightDate"), "yyyy-MM-dd"))
-    logger.info("Converted 'FlightDate' column to date type")
-    
-    string_columns = [field.name for field in df.schema.fields if field.dataType == 'StringType']
-    for col_name in string_columns:
-        df = df.withColumn(col_name, trim(col(col_name)))
-    logger.info("Trimmed whitespace from string columns")
-    
-    df = df.filter(df["DepDelay"] >= 0)
-    logger.info("Filtered out rows where 'DepDelay' is negative")
-    
-    df = df.fillna({'ArrDelay': 0})
-    logger.info("Filled missing values in 'ArrDelay' with 0")
-    
-    df = df.withColumn("Speed", col("Distance") / col("AirTime"))
-    logger.info("Created new column 'Speed' (Distance / AirTime)")
-    
-    df = df.withColumn("CRSDepTime", col("CRSDepTime").cast("string"))
-    df = df.withColumn("CRSArrTime", col("CRSArrTime").cast("string"))
-    logger.info("Converted 'CRSDepTime' and 'CRSArrTime' columns to string type")
-    
-    delay_columns = ['CarrierDelay', 'WeatherDelay', 'NASDelay', 'SecurityDelay', 'LateAircraftDelay']
-    for col_name in delay_columns:
-        df = df.fillna({col_name: 0})
-    logger.info("Filled missing values in delay columns with 0")
-    
-    df = df.withColumn("TotalDelay", col("CarrierDelay") + col("WeatherDelay") + col("NASDelay") + col("SecurityDelay") + col("LateAircraftDelay"))
-    logger.info("Created new column 'TotalDelay' (sum of all delay columns)")
-    
-    df = df.filter(df["Cancelled"] == 0)
-    logger.info("Filtered out rows where 'Cancelled' is 1")
-    
-    columns_to_drop = [
-        'CancellationCode', 'Diverted', 'DivAirportLandings', 'DivReachedDest', 'DivActualElapsedTime', 
-        'DivArrDelay', 'DivDistance', 'Div1Airport', 'Div1AirportID', 'Div1AirportSeqID', 'Div1WheelsOn', 
-        'Div1TotalGTime', 'Div1LongestGTime', 'Div1WheelsOff', 'Div1TailNum', 'Div2Airport', 'Div2AirportID', 
-        'Div2AirportSeqID', 'Div2WheelsOn', 'Div2TotalGTime', 'Div2LongestGTime', 'Div2WheelsOff', 'Div2TailNum', 
-        'Div3Airport', 'Div3AirportID', 'Div3AirportSeqID', 'Div3WheelsOn', 'Div3TotalGTime', 'Div3LongestGTime', 
-        'Div3WheelsOff', 'Div3TailNum', 'Div4Airport', 'Div4AirportID', 'Div4AirportSeqID', 'Div4WheelsOn', 
-        'Div4TotalGTime', 'Div4LongestGTime', 'Div4WheelsOff', 'Div4TailNum', 'Div5Airport', 'Div5AirportID', 
-        'Div5AirportSeqID', 'Div5WheelsOn', 'Div5TotalGTime', 'Div5LongestGTime', 'Div5WheelsOff', 'Div5TailNum'
-    ]
-    df = df.drop(*columns_to_drop)
-    logger.info("Dropped less useful columns for analysis")
+def convert_minutes_to_hhmm(minutes):
+    hours = minutes // 60
+    mins = minutes % 60
+    return f"{int(hours):02d}:{int(mins):02d}"
 
-    return df
+def preprocess_data(df):
+    selecte_columns = ["Year","Quarter","Month","DayofMonth","DayOfWeek","FlightDate","Reporting_Airline","Tail_Number","Flight_Number_Reporting_Airline", "OriginAirportID","Origin","OriginCityName","OriginStateName","DestAirportID" ,"Dest","DestCityName","DestStateName","CRSDepTime","DepTime","DepDelay","CRSArrTime" ,"ArrTime","ArrDelay","Cancelled","CRSElapsedTime","ActualElapsedTime" ,"AirTime","Flights","Distance"]
+    df_processed = df.select(*selecte_columns)
+    time_columns = ["CRSDepTime", "DepTime", "CRSArrTime", "ArrTime"]
+    
+    for col_name in time_columns:
+        df_processed = df_processed.withColumn(col_name, 
+            df_processed[col_name].substr(1, 2).cast("string").concat(":").concat(df_processed[col_name].substr(3, 2).cast("string"))
+        )
+    df_processed = df_processed.withColumn("Cancelled", 
+        df_processed["Cancelled"].cast("string").replace({"0": "not cancelled", "1": "cancelled"})
+    )
+
+    time_columns_in_minutes = ["AirTime", "CRSElapsedTime", "ActualElapsedTime"]
+    
+    for col_name in time_columns_in_minutes:
+        df_processed = df_processed.withColumn(col_name, 
+            convert_minutes_to_hhmm(df_processed[col_name].cast("int"))
+        )
+    return df_processed
+
+def upload_to_hdfs(local_path, hdfs_path):
+    client = InsecureClient('http://hadoop-namenode:9870', user='hdfs')
+    client.upload(hdfs_path, local_path, overwrite=True)
+    logger.info(f"Uploaded {local_path} to HDFS at {hdfs_path}")
 
 def etl_process(input_path, output_path):
     logger.info(f"Starting ETL process for input: {input_path}, output: {output_path}")
     
     try:
         spark = SparkSession.builder \
+            .master("spark://spark:7077") \
             .appName("CSV to Parquet") \
             .getOrCreate()
         logger.info("Spark session created successfully")
@@ -82,10 +60,10 @@ def etl_process(input_path, output_path):
         df = spark.read.csv(input_path, header=True)
         logger.info(f"CSV file read successfully from {input_path}")
         
-        #df = preprocess_data(df)
+        df_processed = preprocess_data(df)
         logger.info("Data preprocessing completed")
 
-        df.write.mode("overwrite").parquet(output_path)
+        df_processed.write.mode("overwrite").parquet(output_path)
         logger.info(f"Data written to Parquet format at {output_path}")
         
     except Exception as e:
@@ -110,7 +88,13 @@ def read_parquet(parquet_path):
     spark.stop()
 
 if __name__ == "__main__":
-    input_path = "/mnt/shared-filesystem/inputs/"
-    output_path = "/mnt/shared-filesystem/outputs/"
-    etl_process(input_path, output_path)
-    read_parquet(output_path)
+    local_input_path = "/mnt/shared-filesystem/inputs/"
+    hdfs_input_path = "/inputs"
+    local_output_path = "/mnt/shared-filesystem/outputs/"
+    hdfs_output_path = "/outputs"
+
+    upload_to_hdfs(local_input_path, hdfs_input_path)
+
+    etl_process(hdfs_input_path, hdfs_output_path)
+    
+    read_parquet(hdfs_output_path)
