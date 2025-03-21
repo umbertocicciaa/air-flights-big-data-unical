@@ -64,6 +64,7 @@ def etl_process(input_path, output_path):
     
     try:
         spark = SparkSession.builder \
+            .master("spark://spark:7077") \
             .appName("CSV to Parquet") \
             .getOrCreate()
         logger.info("Spark session created successfully")
