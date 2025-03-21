@@ -8,9 +8,15 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
       - SPARK_USER=spark
+      - SPARK_DIST_CLASSPATH=$(hadoop classpath)
+    volumes:
+      - ./hadoop-config:/opt/hadoop/etc/hadoop
     ports:
       - '8080:8080'
       - '7077:7077'
+    depends_on:
+      - hadoop-namenode
+      - hadoop-datanode
 
   spark-worker:
     image: docker.io/bitnami/spark:3.5
@@ -24,21 +30,49 @@ services:
       - SPARK_LOCAL_STORAGE_ENCRYPTION_ENABLED=no
       - SPARK_SSL_ENABLED=no
       - SPARK_USER=spark
-
-  etl:
-    image: ghcr.io/umbertocicciaa/airflightsbe:latest
-    ports:
-      - '5001:5000'
+      - SPARK_DIST_CLASSPATH=$(hadoop classpath)
+    volumes:
+      - ./hadoop-config:/opt/hadoop/etc/hadoop
     depends_on:
       - spark
-      - spark-worker
+      - hadoop-namenode
+      - hadoop-datanode
+
+  hadoop-namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    environment:
+      - CLUSTER_NAME=test
+    ports:
+      - "9870:9870"
     volumes:
-      - ./shared-filesystem:/mnt/shared-filesystem:rw
+      - hadoop_namenode:/hadoop/dfs/name
+
+  hadoop-datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    environment:
+      - CLUSTER_NAME=test
+      - CORE_CONF_fs_defaultFS=hdfs://hadoop-namenode:9000
+    ports:
+      - "9864:9864"
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    depends_on:
+      - hadoop-namenode
+
+  # etl:
+  #   image: ghcr.io/umbertocicciaa/airflightsbe:latest
+  #   ports:
+  #     - '5001:5000'
+  #   depends_on:
+  #     - spark
+  #     - spark-worker
+  #   volumes:
+  #     - ./shared-filesystem:/mnt/shared-filesystem:rw
 
   frontend:
     image: ghcr.io/umbertocicciaa/airflightsfe:latest
     depends_on:
-      - etl
+      # - etl
       - redis
       - script
       - spark
@@ -49,7 +83,7 @@ services:
       - '8501:8501'
 
   script:
-    image: ghcr.io/umbertocicciaa/airflightsscript:latest
+    image: airflightsscript:v1
     depends_on:
       - spark
       - spark-worker
@@ -60,3 +94,7 @@ services:
     image: redis
     ports:
       - '6379:6379'
+
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
