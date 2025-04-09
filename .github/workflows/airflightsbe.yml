@@ -1,10 +1,10 @@
-name: ETL Script
+name: Backend
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'src-etl-script/**'
+      - 'src-backend/**'
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: ./src-etl-script
+        context: ./src-backend
         push: true
         platforms: linux/amd64,linux/arm64
-        tags: ghcr.io/${{ github.repository_owner }}/airflightsscript:latest
+        tags: ghcr.io/${{ github.repository_owner }}/airflightsbe:latest

@@ -1,10 +1,10 @@
-name: CICD frontend
+name: Frontend
 
 on:
   workflow_dispatch:
   push:
     paths:
-      - 'src-fe-microservice/**'
+      - 'src-frontend/**'
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
       with:
-        context: ./src-fe-microservice
+        context: ./src-frontend
         push: true
         platforms: linux/amd64,linux/arm64
         tags: ghcr.io/${{ github.repository_owner }}/airflightsfe:latest
