@@ -15,4 +15,6 @@ DONE # grafici correlazione / dispersione
 
 FUTURE
 # cluster kubernates
-# ml ?
+DONE # ml 
+
+FIX
