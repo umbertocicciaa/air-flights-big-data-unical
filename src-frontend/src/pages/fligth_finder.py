@@ -9,7 +9,7 @@ import pydeck as pdk
 from query.query import query_get_volo
 
 from query.route.find_flight import get_flight_advanced_delay, get_flight_advanced_canc, get_flight_advanced_div
-from utils.utils import get_coordinates_city, get_cities, getSortedListaCitta
+from utils.utils import get_coordinates_city, getSortedListaCitta
 
 
 def build_map(origine : str, destinazione: str):

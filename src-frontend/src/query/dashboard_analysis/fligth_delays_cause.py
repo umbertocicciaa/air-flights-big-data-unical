@@ -1,4 +1,3 @@
-from gc import collect
 
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import when, col, count

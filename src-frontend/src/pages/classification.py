@@ -1,6 +1,4 @@
 import streamlit as st
-from matplotlib import pyplot as plt
-import seaborn as sns
 from query.ml.randomforest import train_randomForest_model
 from query.ml.aux import evaluate_model_performance
 from query.query import preprocessing_for_classification
@@ -17,8 +15,8 @@ def plot_confusion_matrix(cm):
     )
 
     fig.update_layout(
-        xaxis=dict(tickmode='linear', tickformat='d'), # formato asse x intero
-        yaxis=dict(tickmode='linear', tickformat='d'),# formato asse y intero
+        xaxis=dict(tickmode='linear', tickformat='d'), 
+        yaxis=dict(tickmode='linear', tickformat='d'),
         width = 2000,
         height = 550
     )

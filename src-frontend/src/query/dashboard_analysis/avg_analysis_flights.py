@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import avg, column, col
+from pyspark.sql.functions import col
 
 
 def average(df: DataFrame):

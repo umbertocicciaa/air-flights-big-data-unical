@@ -10,3 +10,4 @@ pyspark==3.5.5
 plotly
 geopy
 airportsdata
+setuptools

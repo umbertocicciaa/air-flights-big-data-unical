@@ -1,6 +1,6 @@
 import pandas as pd
 from pandas import DataFrame
-from query.aeroporti_analysis.fligth_numbers import calculate_departure_arrival_counts
+from query.airports_analysis.fligth_numbers import calculate_departure_arrival_counts
 from utils.utils import get_coordinates_city
 
 

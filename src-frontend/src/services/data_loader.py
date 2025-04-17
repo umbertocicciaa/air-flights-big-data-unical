@@ -1,5 +1,4 @@
 import pickle
-import pandas as pd
 
 from .session_spark import create_session
 from .redis_connection import init_redis
