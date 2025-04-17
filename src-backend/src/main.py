@@ -2,6 +2,8 @@ import os
 from services.etl import etl_process
 from services.hadoopfs import upload_to_hdfs
 from services.datasets import read_parquet
+from dotenv import load_dotenv
+load_dotenv()
 
 os.makedirs(os.getenv("LOGS_PATH", "/mnt/shared-filesystem/logs"), exist_ok=True)
 local_input_path = os.getenv("LOCAL_INPUT_PATH", "/mnt/shared-filesystem/inputs/")

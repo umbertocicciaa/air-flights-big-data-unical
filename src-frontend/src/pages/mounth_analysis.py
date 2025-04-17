@@ -40,8 +40,6 @@ if mese:
     df_mese= build_month_dataframe(month_from_number(mese))
     lista_avg = calculate_monthly_flight_statistics(df_mese)
 
-    # PARTE 1
-    # Colonne per le metriche
     a, b = st.columns(2)
     c, d = st.columns(2)
 
@@ -65,47 +63,36 @@ if mese:
         d.metric("Media minuti di volo", f"{lista_avg[3]} min", delta=f"{permediaminutivolo} %", border=True)
 
 
-    #PARTE 2
-    # Creazione delle categorie di ritardi
     categorie = ["0-15", "16-30", "31-45", "46-60", "60+"]
     range_ritardi = calculateFlightDelayRange(df_mese)
 
-    # Creazione di un DataFrame pandas per il grafico a barre
     df_bar = pd.DataFrame({
         "Categorie": categorie,
         "Ritardi": range_ritardi
     })
 
-    # Creazione di due colonne con la stessa altezza
-    col1, col2 = st.columns(2)  # Due colonne di uguale larghezza
+    col1, col2 = st.columns(2)
 
     with col1:
-        # Grafico a barre
         st.markdown("""### :blue[Classificazione dei ritardi in fasce temporali]""")
         st.bar_chart(df_bar.set_index("Categorie")["Ritardi"])
 
     with col2:
-        # Dati per il grafico a torta
         info_voli_mese = monthly_flight_statistics(df_mese)
         labels = ['Orario', 'Cancellati', 'Dirottati', 'Ritardi']
 
         fig = go.Figure(
             data=[go.Pie(labels=labels, values=info_voli_mese, hole=0.3, domain={'x': [0, 1], 'y': [0, 1]})])
 
-        # Modifica della dimensione della torta
         fig.update_traces(textinfo='percent+label',
-                          pull=[0.1, 0.3, 0.3, 0.1])  # Aggiungere una leggera separazione per evidenziare
+                          pull=[0.1, 0.3, 0.3, 0.1])  
 
         st.markdown("""### :blue[Stato dei voli]""")
         st.plotly_chart(fig)
 
-    #PARTE 3
-
     cause_ritardi= causes_delay(df_mese)
-    # Convertiamo il dizionario in un DataFrame
     df_cause_ritardi = pd.DataFrame(list(cause_ritardi.items()), columns=['Causa', 'Numero di Ritardi'])
 
     st.markdown("""### :blue[Principali cause dei ritardi]""")
-    # Utilizziamo st.bar_chart per mostrare il grafico
     st.bar_chart(df_cause_ritardi.set_index('Causa'),horizontal=True)
 

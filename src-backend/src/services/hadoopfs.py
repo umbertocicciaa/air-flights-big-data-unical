@@ -1,6 +1,8 @@
 from hdfs import InsecureClient 
 from utils.logger import logger
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def upload_to_hdfs(local_path, hdfs_path):
     hdfs_url = os.getenv('HDFS_URL', 'http://hadoop-namenode:9870')

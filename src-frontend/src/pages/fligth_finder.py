@@ -13,33 +13,26 @@ from utils.utils import get_coordinates_city, getSortedListaCitta
 
 
 def build_map(origine : str, destinazione: str):
-    # Ottieni le coordinate di origine e destinazione
     origin = get_coordinates_city(origine)
     destination = get_coordinates_city(destinazione)
 
-    # Calcola la distanza tra i due punti
     distance_km = geodesic(origin, destination).kilometers
 
-    # Calcola il punto medio tra origine e destinazione
     midpoint = (
         (origin[0] + destination[0]) / 2,
         (origin[1] + destination[1]) / 2,
     )
 
-    # Crea un DataFrame per i punti
     points = pd.DataFrame([
         {"name": "Origin", "latitude": origin[0], "longitude": origin[1]},
         {"name": "Destination", "latitude": destination[0], "longitude": destination[1]},
     ])
 
-    # Crea un DataFrame per il testo (posizionato al punto medio)
     texts = pd.DataFrame([
         {"text": f"{distance_km:.1f} km", "latitude": midpoint[0], "longitude": midpoint[1]}
     ])
 
-    # Configurazione della mappa con Pydeck
     layers = [
-        # Aggiunge un layer per i punti
         pdk.Layer(
             "ScatterplotLayer",
             data=points,
@@ -47,7 +40,6 @@ def build_map(origine : str, destinazione: str):
             get_color="[200, 30, 0, 160]",
             get_radius=10_000,
         ),
-        # Aggiunge un layer per la linea tra i due punti
         pdk.Layer(
             "LineLayer",
             data=[{"start": [origin[1], origin[0]], "end": [destination[1], destination[0]]}],
@@ -56,7 +48,6 @@ def build_map(origine : str, destinazione: str):
             get_color="[30, 144, 255]",
             get_width=4,
         ),
-        # Aggiunge un layer per il testo (distanza)
         pdk.Layer(
             "TextLayer",
             data=texts,
@@ -68,7 +59,6 @@ def build_map(origine : str, destinazione: str):
         ),
     ]
 
-    # Imposta la vista iniziale della mappa
     view_state = pdk.ViewState(
         latitude=midpoint[0],
         longitude=midpoint[1],
@@ -76,7 +66,6 @@ def build_map(origine : str, destinazione: str):
         pitch=50,
     )
 
-    # Visualizza la mappa con Pydeck
     st.pydeck_chart(pdk.Deck(layers=layers, initial_view_state=view_state))
 
 aereoporti = airports = airportsdata.load('IATA')
@@ -168,7 +157,6 @@ def visualizza_informazioni(df: DataFrame):
 
 
 def create_select_button(city: list):
-    #scelte obbligatorie
     origine = st.sidebar.selectbox("Scegliere origine", city, index= None)
     dest = st.sidebar.selectbox("Scegliere destinazione", city , index= None)
     data = st.sidebar.date_input("Inserire data di partenza", datetime.date(2013,1,1))
@@ -215,13 +203,10 @@ st.write("""---""")
 
 st.sidebar.title(":blue[INIZIA DA QUI]")
 
-#va ordinata
 city = getSortedListaCitta()
 
 origine, dest, data, orario = create_select_button(city)
 
-#scelte opzionali
-# senza ritardo, senza dirottamenti, se dirottato stampa gli aereoporti di dirottamento, raggiunge destinazione
 senza_ritardo, senza_cancellazioni, senza_dirottamenti = create_optinal_choose()
 print(senza_ritardo,senza_cancellazioni,senza_dirottamenti)
 ricerca = False

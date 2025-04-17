@@ -3,24 +3,19 @@ import plotly.express as px
 from query.query import build_month_dataframe, clusteringFlights, preprocessing_clustering
 from utils.utils import month_from_number
 
-
-# Funzione per il clustering e la visualizzazione
-
-
 def visualizza_clustering_k(df, k):
     dictResultClustring = clusteringFlights(df, k)
     clusteredData = dictResultClustring["clusteredData"]
     silhouette = dictResultClustring["silhouette"]
     centroids = dictResultClustring["centroids"]
 
-    # Calcolo il numero di punti per ogni cluster
     df_clusterPoint = clusteredData.groupby('cluster').size().rename('NumeroVoli')
 
     fig = px.scatter(
         clusteredData,
         x="ArrDelay",
         y="flight_duration",
-        color='cluster',  # Usa il cluster per differenziare i colori
+        color='cluster',
         labels={"cluster": "Cluster"},
     )
     fig1 = px.bar(df_clusterPoint, x='NumeroVoli', y=df_clusterPoint.index,
@@ -29,8 +24,6 @@ def visualizza_clustering_k(df, k):
     fig1.update_layout(yaxis=dict(tickmode='linear'))
     return fig, fig1, silhouette
 
-
-#PAGE
 mesi= ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno','luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre']
 
 st.set_page_config(page_title="Clustering", layout="wide")
@@ -42,7 +35,6 @@ mese = st.sidebar.selectbox('Seleziona un mese',mesi,index=None)
 if mese:
 
     df = build_month_dataframe(month_from_number(mese))
-    #seleziono il 25% di dati da utilizzare per il clustering
     df_sottoinsieme = df.sample(fraction=0.25)
     df_clustering = preprocessing_clustering(df_sottoinsieme)
     k_values = [2, 3, 4, 5]
