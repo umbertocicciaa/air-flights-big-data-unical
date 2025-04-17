@@ -1,5 +1,7 @@
 import pickle
 import pandas as pd
+
+from .session_spark import create_session
 from .redis_connection import init_redis
 import logging
 import os
@@ -21,9 +23,9 @@ redis_key = "parquet_data"
 
 
 def read_parquet(parquet_path):
-    logger.info(f"Reading Parquet file from path: {parquet_path}")
-    data = pd.read_parquet(parquet_path)
-    logger.info("Successfully read Parquet file")
+    spark = create_session() 
+    data = spark.read.parquet(parquet_path)
+    spark.stop()
     return data
 
 def load_parquet_data():

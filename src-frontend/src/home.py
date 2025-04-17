@@ -1,6 +1,5 @@
 import streamlit as st
 
-
 def main():
     st.title("Home")
     st.write("This application allows you to explore and analyze data in Parquet format.")
