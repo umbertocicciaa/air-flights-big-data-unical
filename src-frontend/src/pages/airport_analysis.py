@@ -6,7 +6,7 @@ from query.query import query_numero_partenze_e_arrivi_citta, query_ritardo_medi
 
 def create_dataframe_pandas_to_visualize_delays(lista_ritardi):
     df= pd.DataFrame({'ritardi partenze':lista_ritardi[0],'ritardi arrivi':lista_ritardi[1]})
-    df.index= range(1,13)
+    df.index=range(1,13)
     return df
 
 def create_dataframe_pandas_to_visualize_city_coordinates(lista_citta):
@@ -78,7 +78,7 @@ with st.expander("maggiori informazioni"):
 lista_ordinata_citta=getSortedListaCitta()
 
 citta = st.sidebar.selectbox('Seleziona una città', lista_ordinata_citta, index=None)
-# seleziono il numero di destinazioni piu frequenti da visualizzare nel grafico a  barre.
+
 nmaxfreq = st.sidebar.select_slider("Seleziona il numero di destinazioni piu frequenti da visualizzare",
                             options=[None] + [i for i in range(1, 11)])
 

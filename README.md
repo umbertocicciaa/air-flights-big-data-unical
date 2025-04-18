@@ -26,5 +26,6 @@ cd air-flights-big-data-unical
 To run the project locally, use Docker Compose:
 
 ```sh
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
 docker-compose up
 ```

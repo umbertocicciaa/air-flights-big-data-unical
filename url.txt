@@ -1,5 +1,0 @@
-# spark
-http://localhost:8080/
-
-# frontend
-http://localhost:8501/
