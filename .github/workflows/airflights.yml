@@ -1,4 +1,4 @@
-name: Frontend
+name: Airflights
 
 on:
   workflow_dispatch:
