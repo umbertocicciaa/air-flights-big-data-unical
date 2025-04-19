@@ -4,3 +4,4 @@ outputs
 spark*
 shared-filesystem
 .vscode
+.idea

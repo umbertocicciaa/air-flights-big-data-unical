@@ -1,0 +1,16 @@
+pyspark==3.5.5
+narwhals
+hdfs
+python-dotenv
+streamlit
+pandas
+pyarrow
+numpy
+matplotlib
+seaborn
+scikit-learn
+redis
+plotly
+geopy
+airportsdata
+setuptools
