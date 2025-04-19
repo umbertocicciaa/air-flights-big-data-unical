@@ -3,7 +3,7 @@ import os
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ..utils.datasets import read_parquet
+from utils.datasets import read_parquet
 
 hdfs_input_path = os.getenv("HDFS_OUTPUT_PATH", "/outputs")
 

@@ -2,8 +2,8 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-from ..utils.utils import get_city_coordinate, get_airport_coordinates, get_sorted_city_list
-from ..query.query import query_numero_partenze_e_arrivi_citta, query_ritardo_medio_partenza_arrivo_citta, query_destinazione_numvoli_citta, query_citta_numvoli_aeroporto
+from utils.utils import get_city_coordinate, get_airport_coordinates, get_sorted_city_list
+from query.query import query_numero_partenze_e_arrivi_citta, query_ritardo_medio_partenza_arrivo_citta, query_destinazione_numvoli_citta, query_citta_numvoli_aeroporto
 
 
 def create_dataframe_pandas_to_visualize_delays(delay_list):

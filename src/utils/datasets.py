@@ -1,5 +1,5 @@
-from ..logs.logger import logger
-from session_spark import create_session
+from logs.logger import logger
+from utils.session_spark import create_session
 
 
 def read_parquet(parquet_path):

@@ -1,7 +1,7 @@
 import os
 from pyspark.sql import DataFrame, SparkSession
 
-local_input_path = os.getenv("LOCAL_INPUT_PATH", "/mnt/shared-filesystem/outputs/")
+local_input_path = os.getenv("LOCAL_INPUT_PATH", "/shared-filesystem/outputs/")
 hdfs_input_path = os.getenv("HDFS_INPUT_PATH", "/outputs")
 delimiter = ","
 

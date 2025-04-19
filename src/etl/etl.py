@@ -1,6 +1,6 @@
 from preprocesing import preprocess_data
-from ..utils.session_spark import create_session
-from ..logs.logger import logger
+from utils.session_spark import create_session
+from logs.logger import logger
 
 
 def etl_process(input_path, output_path):

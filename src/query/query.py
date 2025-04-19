@@ -3,16 +3,16 @@ import pandas as pd
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col
 from utils.data_visualization import create_month_dataframe, create_all_dataframe
-from .ml.clustering import clustering_flights_on_time_delayed
-from .ml.aux import build_train_dataframe
-from .airports_analysis.city_fligth_airport import city_flight_airport
-from .airports_analysis.max_frequent_airport_dest import destinations_number_city
-from .airports_analysis.fligth_numbers import calculate_departure_arrival_counts
-from .airports_analysis.flitgh_delays import average_month_delay_for_city
-from .dashboard_analysis.fligth_infos import monthly_flight_statistics
-from .route.find_flight import get_flight
-from .annual_stats.airport_traffic import most_traffic_city
-from .annual_stats.month_week_fligth import get_weekly_flight_counts
+from query.ml.clustering import clustering_flights_on_time_delayed
+from query.ml.aux import build_train_dataframe
+from query.airports_analysis.city_fligth_airport import city_flight_airport
+from query.airports_analysis.max_frequent_airport_dest import destinations_number_city
+from query.airports_analysis.fligth_numbers import calculate_departure_arrival_counts
+from query.airports_analysis.flitgh_delays import average_month_delay_for_city
+from query.dashboard_analysis.fligth_infos import monthly_flight_statistics
+from query.route.find_flight import get_flight
+from query.annual_stats.airport_traffic import most_traffic_city
+from query.annual_stats.month_week_fligth import get_weekly_flight_counts
 from utils.session_spark import create_session
 from etl.preprocesing import preprocess_data
 
