@@ -25,8 +25,8 @@ def view_clustering_k(dataframes, k_centr):
     return figs, fig1, silhouettes
 
 
-mesi = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre',
-        'novembre', 'dicembre']
+mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
+        'november', 'december']
 
 st.set_page_config(page_title="Clustering", layout="wide")
 st.title(":blue[Visualizzazione del Clustering K-means]")
@@ -35,8 +35,8 @@ st.write(":blue[Questa pagina mostra la visualizzazione del clustering K-means p
 mese = st.sidebar.selectbox('Seleziona un mese', mesi, index=None)
 
 if mese:
-
-    df = build_month_dataframe(month_from_number(mese))
+    mese_number = int(month_from_number(mese))
+    df = build_month_dataframe(mese_number)
     df_subsets = df.sample(fraction=0.25)
     df_clustering = preprocessing_clustering(df_subsets)
     k_values = [2, 3, 4, 5]

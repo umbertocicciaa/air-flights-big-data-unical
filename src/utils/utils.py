@@ -1,6 +1,5 @@
 import locale
 import os
-
 import airportsdata
 import pandas as pd
 from geopy import Nominatim
@@ -8,62 +7,12 @@ from datetime import datetime, timedelta
 
 
 def month_from_number(number):
-    match number:
-        case 1:
-            return "january"
-        case 2:
-            return "february"
-        case 3:
-            return "march"
-        case 4:
-            return "april"
-        case 5:
-            return "may"
-        case 6:
-            return "june"
-        case 7:
-            return "july"
-        case 8:
-            return "august"
-        case 9:
-            return "september"
-        case 10:
-            return "october"
-        case 11:
-            return "november"
-        case 12:
-            return "december"
-
-
-def number_from_month(month):
-    match month.lower():
-        case "january":
-            return 1
-        case "february":
-            return 2
-        case "march":
-            return 3
-        case "april":
-            return 4
-        case "may":
-            return 5
-        case "june":
-            return 6
-        case "july":
-            return 7
-        case "august":
-            return 8
-        case "september":
-            return 9
-        case "october":
-            return 10
-        case "november":
-            return 11
-        case "december":
-            return 12
-        case _:
-            return "month not valid"
-
+    months = {
+        1: "january", 2: "february", 3: "march", 4: "april",
+        5: "may", 6: "june", 7: "july", 8: "august",
+        9: "september", 10: "october", 11: "november", 12: "december"
+    }
+    return months.get(number, "number not valid")
 
 def previous_month(month):
     locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8')

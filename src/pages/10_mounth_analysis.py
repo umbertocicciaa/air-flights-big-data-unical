@@ -8,8 +8,8 @@ from query.dashboard_analysis.range_delay import calculateFlightDelayRange
 from utils.utils import month_from_number, previous_month
 import plotly.graph_objects as go
 
-mesi = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre',
-        'novembre', 'dicembre']
+mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
+        'november', 'december']
 
 st.set_page_config(page_title="Statistiche mensili", layout="wide")
 st.sidebar.header(":blue[Statistiche mensili]")
@@ -38,7 +38,8 @@ with st.expander("maggiori informazioni"):
 mese = st.sidebar.selectbox('Seleziona un mese', mesi, index=None)
 
 if mese:
-    df_mese = build_month_dataframe(month_from_number(mese))
+    mese_numero = mesi.index(mese) + 1
+    df_mese = build_month_dataframe(mese_numero)
     lista_avg = calculate_monthly_flight_statistics(df_mese)
 
     a, b = st.columns(2)
