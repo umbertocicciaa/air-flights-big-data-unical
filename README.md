@@ -1,4 +1,4 @@
-# Air-flights-big-data-unical
+# Air flights big data unical
 
 ## Project Overview
 
@@ -17,7 +17,7 @@ Before running the project, ensure you have the following installed:
 Clone the repository:
 
 ```sh
-git clone https://github.com/yourusername/air-flights-big-data-unical.git
+git clone https://github.com/umbertocicciaa/air-flights-big-data-unical.git
 cd air-flights-big-data-unical
 ```
 
@@ -27,5 +27,5 @@ To run the project locally, use Docker Compose:
 
 ```sh
 export JAVA_HOME=$(/usr/libexec/java_home -v 11)
-docker-compose up
+docker compose up
 ```
