@@ -1,8 +1,8 @@
 import streamlit as st
 
-from ....src_backend.src.query.ml.randomforest import train_random_forest_model
-from ....src_backend.src.query.ml.aux import evaluate_model_performance
-from ....src_backend.src.query.query import preprocessing_for_classification
+from ..query.ml.randomforest import train_random_forest_model
+from ..query.ml.aux import evaluate_model_performance
+from ..query.query import preprocessing_for_classification
 from decimal import Decimal, ROUND_UP
 import plotly.express as px
 

@@ -1,11 +1,11 @@
 import pandas as pd
 import streamlit as st
-from ....src_backend.src.query.query import build_month_dataframe
-from ....src_backend.src.query.dashboard_analysis.avg_analysis_flights import calculate_monthly_flight_statistics
-from ....src_backend.src.query.dashboard_analysis.fligth_delays_cause import causes_delay
-from ....src_backend.src.query.dashboard_analysis.fligth_infos import monthly_flight_statistics
-from ....src_backend.src.query.dashboard_analysis.range_delay import calculateFlightDelayRange
-from ....src_backend.src.utils.utils import month_from_number, previous_month
+from query.query import build_month_dataframe
+from query.dashboard_analysis.avg_analysis_flights import calculate_monthly_flight_statistics
+from query.dashboard_analysis.fligth_delays_cause import causes_delay
+from query.dashboard_analysis.fligth_infos import monthly_flight_statistics
+from query.dashboard_analysis.range_delay import calculateFlightDelayRange
+from utils.utils import month_from_number, previous_month
 import plotly.graph_objects as go
 
 mesi = ['gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno', 'luglio', 'agosto', 'settembre', 'ottobre',

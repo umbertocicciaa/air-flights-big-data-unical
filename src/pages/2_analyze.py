@@ -1,6 +1,6 @@
 import os
 import streamlit as st
-from ....src_backend.src.utils.datasets import read_parquet
+from ..utils.datasets import read_parquet
 
 hdfs_input_path = os.getenv("HDFS_OUTPUT_PATH", "/outputs")
 

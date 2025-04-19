@@ -6,10 +6,10 @@ from pyspark import Row
 from pyspark.sql import DataFrame
 import pydeck as pdk
 import airportsdata
-from src_backend.src.query.query import query_get_volo
+from query.query import query_get_volo
 
-from src_backend.src.query.route.find_flight import get_flight_advanced_delay, get_flight_advanced_canc, get_flight_advanced_div
-from src_backend.src.utils.utils import get_coordinates_city, get_sorted_city_list
+from query.route.find_flight import get_flight_advanced_delay, get_flight_advanced_canc, get_flight_advanced_div
+from utils.utils import get_coordinates_city, get_sorted_city_list
 
 
 def build_map(origin: str, destinazione: str):

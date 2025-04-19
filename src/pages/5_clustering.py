@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.express as px
-from ....src_backend.src.query.query import build_month_dataframe, clustering_flights, preprocessing_clustering
-from ....src_backend.src.utils.utils import month_from_number
+from ..query.query import build_month_dataframe, clustering_flights, preprocessing_clustering
+from ..utils.utils import month_from_number
 
 
 def view_clustering_k(dataframes, k_centr):
