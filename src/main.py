@@ -14,5 +14,5 @@ hdfs_output_path = os.getenv("HDFS_OUTPUT_PATH", "/outputs")
 if __name__ == "__main__":
     # upload_to_hdfs(local_input_path, hdfs_input_path)
     # etl_process(hdfs_input_path, hdfs_output_path)
-    upload_to_hdfs(local_output_path, hdfs_output_path)
-    dataset = read_parquet(hdfs_output_path)
+    # upload_to_hdfs(local_output_path, hdfs_output_path)
+    dataset = read_parquet('/Users/umbertodomenicociccia/Desktop/Umb/unical/air-flights-big-data-unical/shared-filesystem/outputs')
