@@ -6,11 +6,12 @@ import matplotlib.pyplot as plt
 
 from utils.datasets import read_parquet
 
-hdfs_input_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/outputs/")
+hdfs_input_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/")
 
 st.title("Correlation Graphs")
 
-data = read_parquet(hdfs_input_path)
+path =f"{hdfs_input_path}outputs"
+data = read_parquet(path)
 
 if data is not None:
 

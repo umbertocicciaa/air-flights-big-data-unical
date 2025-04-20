@@ -2,7 +2,7 @@ import os
 import streamlit as st
 from utils.datasets import read_parquet
 
-hdfs_input_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/outputs/")
+hdfs_input_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/")
 
 
 def analyze_data(dataframe):
@@ -24,5 +24,6 @@ def analyze_data(dataframe):
 
 
 st.title("Data Analysis")
-data = read_parquet(hdfs_input_path)
+path =f"{hdfs_input_path}outputs"
+data = read_parquet(path)
 analyze_data(data)
