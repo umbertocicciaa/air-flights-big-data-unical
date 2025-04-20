@@ -1,9 +1,14 @@
-from preprocesing import preprocess_data
+import os
+from etl.preprocesing import preprocess_data
 from utils.session_spark import create_session
 from logs.logger import logger
 
 
+hdfs_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/")
+
 def etl_process(input_path, output_path):
+    input_path = hdfs_path + (input_path.lstrip("/"))
+    output_path = hdfs_path + (output_path.lstrip("/"))
     logger.info(f"Starting ETL process for input: {input_path}, output: {output_path}")
 
     try:
