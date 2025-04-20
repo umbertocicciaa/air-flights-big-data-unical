@@ -74,134 +74,136 @@ def make_delay_plot(row: Row):
     val = (row["CarrierDelay"], row["WeatherDelay"],row["NASDelay"], row["SecurityDelay"],row["LateAircraftDelay"])
     if all(v is not None for v in val):
         data = pd.DataFrame({
-            "Tipo di ritardo": ["CarrierDelay", "WeatherDelay", "NASDelay", "SecurityDelay", "LateAircraftDelay"],
-            "Minuti": val })
-        st.markdown("#### :blue[Cause del ritardo]")
-        st.bar_chart(data.set_index("Tipo di ritardo")["Minuti"])
+            "Type of delay": ["CarrierDelay", "WeatherDelay", "NASDelay", "SecurityDelay", "LateAircraftDelay"],
+            "Minutes": val })
+        st.markdown("#### :blue[Causes of the delay]")
+        st.bar_chart(data.set_index("Type of delay")["Minutes"])
 
 
 def visualizza_dir(row: Row):
     for i in range(1,6):
         if row[f"Div{i}Airport"] is not None:
             aereoporto = aereoporti[row[f"Div{i}Airport"]]["name"]
-            st.metric("Aereporto di dirottamento", aereoporto , border=True)
+            st.metric("Airport hijacking", aereoporto , border=True)
     if row["DivReachedDest"] == 1.0:
-        st.markdown("### :blue[L'AEREO HA RAGGIUNTO LA DESTINAZIONE FINALE]")
+        st.markdown("### :blue[THE PLANE HAS REACHED ITS FINAL DESTINATION]")
 
 def visualizzazione_singola(row: Row):
     if row["Cancelled"] == 1:
-        st.markdown("# :red[VOLO CANCELLATO!]")
+        st.markdown("# :red[FLIGHT CANCELLED!]")
         return
     aereoportoOr = aereoporti[row["Origin"]]["name"]
     aereoportoDest = aereoporti[row["Dest"]]["name"]
 
-    st.markdown("### :blue[Informazioni geografiche]")
+    st.markdown("### :blue[Geographic information]")
     col1, col2 = st.columns(2)
     with col1:
-        st.metric("Aereoporto di partenza", aereoportoOr, border=True)
+        st.metric("Departure airport", aereoportoOr, border=True)
     with col2:
-        st.metric("Aereoporto di destinazione", aereoportoDest , border=True)
+        st.metric("Destination airport", aereoportoDest , border=True)
 
-    st.markdown("### :blue[Codice di volo]")
-    st.metric("Codice di volo", row["Flight_Number_Reporting_Airline"], border=True)
+    st.markdown("### :blue[Flight Code]")
+    st.metric("Flight Code", row["Flight_Number_Reporting_Airline"], border=True)
 
     if row["Diverted"] == 1:
-        st.markdown("# :red[AEREO DIROTTATO]")
+        st.markdown("# :red[DIVERTED FLIGTH]")
         col4, col5 = st.columns(2)
         with col4:
-            st.metric("Orario di partenza schedulato", row["CRSDepTime"].strftime("%H:%M"), border=True)
+            st.metric("Scheduled departure time", row["CRSDepTime"].strftime("%H:%M"), border=True)
         with col5:
-            st.metric("Orario di arrivo schedulato", row["CRSArrTime"].strftime("%H:%M"), border=True)
-        st.markdown("### :blue[Aereoporti in cui il volo è stato dirottato]")
+            st.metric("Scheduled arrival time", row["CRSArrTime"].strftime("%H:%M"), border=True)
+        st.markdown("### :blue[Airports where the flight was diverted]")
         visualizza_dir(row)
         return
 
-    st.markdown("### :blue[Informazioni orarie]")
+    st.markdown("### :blue[Hourly information]")
     col6, col7, col8, col9 = st.columns(4)
     with col6:
-        st.metric("Orario di partenza schedulato", row["CRSDepTime"].strftime("%H:%M"), delta=0, delta_color="off", border=True)
+        st.metric("Scheduled departure time", row["CRSDepTime"].strftime("%H:%M"), delta=0, delta_color="off", border=True)
     with col7:
-        st.metric("Orario di partenza effettivo", row["DepTime"].strftime("%H:%M"), delta = row["DepDelay"],delta_color="inverse", border=True)
+        st.metric("Actual departure time", row["DepTime"].strftime("%H:%M"), delta = row["DepDelay"],delta_color="inverse", border=True)
     with col8:
-        st.metric("Orario di arrivo schedulato", row["CRSArrTime"].strftime("%H:%M"),delta=0, delta_color="off",border=True)
+        st.metric("Scheduled arrival time", row["CRSArrTime"].strftime("%H:%M"),delta=0, delta_color="off",border=True)
     with col9:
-        st.metric("Orario di arrivo effettivo", row["ArrTime"].strftime("%H:%M"), delta = row["ArrDelay"],delta_color="inverse", border=True)
+        st.metric("Actual arrival time", row["ArrTime"].strftime("%H:%M"), delta = row["ArrDelay"],delta_color="inverse", border=True)
 
-    st.markdown("### :blue[Informazioni sui ritardi]")
+    st.markdown("### :blue[Delay information]")
     col8, col9 = st.columns(2)
     minRit = row["ArrDelayMinutes"]
     if minRit is not None:
         with col8:
-            st.metric("Minuti di ritardo", f"{minRit} min", border=True)
+            st.metric("Minutes late", f"{minRit} min", border=True)
         if minRit > 0:
             with col9:
                 make_delay_plot(row)
         else:
             with col9:
-                st.markdown("### :blue[Il volo ha viaggiato in perfetto orario]")
+                st.markdown("### :blue[The flight flew right on time]")
     else:
-        st.markdown("#### :red[Informazioni non disponibili]")
+        st.markdown("#### :red[Information not available]")
 
 def visualizza_informazioni(df: DataFrame):
     numVoli = df.count()
     if numVoli == 0:
-        st.write("# :red[Non esiste nessun volo per le informazioni inserite]")
+        st.write("# :red[There is no flight for the information entered]")
         return
     try:
         volo = df.first()
         visualizzazione_singola(volo)
     except Exception as e:
         print(e)
-        st.markdown("# :red[ERRORE: Non è possibile visualizzare i dati]")
+        st.markdown("# :red[ERROR: Unable to display data]")
 
 
 
 def create_select_button(city: list):
-    origine = st.sidebar.selectbox("Scegliere origine", city, index= None)
-    dest = st.sidebar.selectbox("Scegliere destinazione", city , index= None)
-    data = st.sidebar.date_input("Inserire data di partenza", datetime.date(2013,1,1))
-    orario = st.sidebar.time_input("Orario di partenza", datetime.time(0, 0))
+    origine = st.sidebar.selectbox("Choose origin", city, index= None)
+    dest = st.sidebar.selectbox("Choose destination", city , index= None)
+    data = st.sidebar.date_input("Enter departure date", datetime.date(2013,1,1))
+    orario = st.sidebar.time_input("Departure time", datetime.time(0, 0))
     return origine, dest, data, orario
 
 def create_optinal_choose():
-    opt = st.sidebar.expander("Ricerca avanzata")
+    opt = st.sidebar.expander("Advanced search")
     with opt:
-        senza_ritardo = st.checkbox("Escludi voli con ritardi")
-        senza_cancellazioni = st.checkbox("Escludi voli cancellati")
-        senza_dirottamenti = st.checkbox("Escludi voli dirottati")
+        senza_ritardo = st.checkbox("Exclude flights with delays")
+        senza_cancellazioni = st.checkbox("Exclude cancelled flights")
+        senza_dirottamenti = st.checkbox("Exclude hijacked flights")
     return senza_ritardo,senza_cancellazioni, senza_dirottamenti
 
-st.set_page_config(page_title="Ricerca", layout="wide")
-st.title(":blue[RICERCA IL VOLO]")
+st.set_page_config(page_title="Research", layout="wide")
+st.title(":blue[FLIGTH FINDER]")
 
-st.markdown("Benvenuto nella pagina di ricerca dei voli! Questa interfaccia consente di effettuare ricerche avanzate sui voli "
-          "e di visualizzare dettagli utili come il percorso, eventuali ritardi, cancellazioni e dirottamenti.")
+st.markdown(
+    "Welcome to the flight search page! This interface allows you to perform advanced searches on flights and view useful details such as the route, any delays, cancellations and diversions."
+)
 
-with st.expander("maggiori informazioni"):
+with st.expander("more information"):
     st.markdown("""
-    Nel pannello laterale potrai:
-    
-    - Selezionare origine e destinazione dalla lista di città disponibili.
-    - Indicare la data e l'orario di partenza desiderati.
-    - Avviare la ricerca per ottenere informazioni sui voli che corrispondono ai criteri inseriti.
+   In the side panel you can:
 
-    Potrai visualizzare la mappa del percorso tra l'aeroporto di partenza e l'aeroporto di destinazione, che include
-    un'indicazione visiva della distanza totale (in km).
+    - Select the origin and destination from the list of available cities.
+    - Indicate the desired departure date and time.
+    - Start the search to obtain information on flights that match the entered criteria.
 
-    :blue-background[Informazioni di base]
-    
-    - Aeroporto di partenza e destinazione.
-    - Orari di partenza e arrivo (schedulati ed effettivi).
-    - Cause di eventuali ritardi.
+    You will be able to view the route map between the departure airport and the destination airport, which includes
+    a visual indication of the total distance (in km).
 
-    :blue-background[Gestione dei Voli Dirottati o Cancellati]
-    
-    - Se il volo è dirottato, visualizza gli aeroporti alternativi in cui è stato destinato.
-    - Se il volo è stato cancellato, viene visualizzato un messaggio di errore.
+    :blue-background[Basic information]
+
+    - Departure and destination airport.
+    - Departure and arrival times (scheduled and actual).
+    - Causes of any delays.
+
+    :blue-background[Management of Diverted or Cancelled Flights]
+
+    - If the flight is diverted, displays the alternative airports to which it has been destined.
+    - If the flight has been cancelled, an error message is displayed.
     """)
+    
 st.write("""---""")
 
-st.sidebar.title(":blue[INIZIA DA QUI]")
+st.sidebar.title(":blue[START HERE]")
 
 city = get_sorted_city_list()
 
@@ -211,12 +213,12 @@ senza_ritardo, senza_cancellazioni, senza_dirottamenti = create_optinal_choose()
 print(senza_ritardo,senza_cancellazioni,senza_dirottamenti)
 ricerca = False
 if origine is not None and dest is not None:
-    ricerca = st.sidebar.button("CERCA")
+    ricerca = st.sidebar.button("FIND")
 
 if ricerca:
-    st.markdown(f"### :blue[Percorso del Volo: {origine} ➡️ {dest}]")
+    st.markdown(f"### :blue[Flight Path: {origine} ➡️ {dest}]")
     build_map(origine,dest)
-    st.markdown("# :blue[Informazioni sul volo]")
+    st.markdown("# :blue[Flight information]")
     voli = query_get_volo(data, origine, dest, orario)
     voli.show()
     if senza_ritardo:

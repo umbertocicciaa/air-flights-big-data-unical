@@ -4,8 +4,8 @@ import plotly.express as px
 from query.query import query_mesi_stato_voli, query_mesi_voli_settimana, query_citta_num_voli
 import plotly.graph_objs as go
 
-mesi = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre",
-        "Novembre", "Dicembre"]
+mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
+        'november', 'december']
 
 
 def create_dataframe_pandas_to_visualize_bargraph_status_numvoli(status_num_voli: list[list[int]]):
@@ -15,32 +15,32 @@ def create_dataframe_pandas_to_visualize_bargraph_status_numvoli(status_num_voli
     in_ritardo = status_num_voli[3]
 
     dataframes = pd.DataFrame({
-        'Mese': mesi,
-        'In orario': in_orario,
-        'Cancellati': cancellati,
-        'Dirottati': dirottati,
-        'In ritardo': in_ritardo
+        'Month': mesi,
+        'On time': in_orario,
+        'Canceled': cancellati,
+        'Diverted': dirottati,
+        'Delayed': in_ritardo
     })
     return dataframes
 
 
-# Imposta la configurazione della pagina
-st.set_page_config(page_title="Statistiche annuali", layout="wide")
-st.title(":blue[Statistiche annuali]")
+st.set_page_config(page_title="Annual statistics", layout="wide")
+st.title(":blue[Annual statistics]")
 
 st.markdown("""
 
-La pagina visualizza diverse analisi e rappresentazioni grafiche relative al traffico aereo, offrendo una panoramica complessa delle statistiche sui voli.
-I dati vengono mostrati in tre sezioni principali:
+The page displays various analyses and graphical representations of air traffic, providing a complex overview of flight statistics.
+The data is displayed in three main sections:
+
 """)
 
 with st.expander("maggiori informazioni"):
     st.markdown("""
-    - :blue-background[Grafico a barre sullo stato dei voli]: Mostra il numero di voli per ciascun mese dell'anno, suddiviso per stato del volo (in orario, in ritardo, cancellato e dirottato). Questo grafico consente di comprendere facilmente le tendenze mensili e la distribuzione dei vari stati dei voli.
-    - :blue-background[Mappa di calore settimanale]: Visualizza il numero di voli per ogni giorno della settimana, suddiviso per mese. L'uso di una mappa di calore aiuta a identificare i periodi di maggiore traffico settimanale e mensile, con una rappresentazione visiva chiara delle fluttuazioni settimanali.
-    - :blue-background[Mappa geografica dei voli per città]: Rappresenta la distribuzione dei voli nelle città più trafficate. Ogni città è rappresentata da un marker che varia in dimensione e colore in base al numero di voli, offrendo una panoramica geografica sul traffico aereo a livello nazionale.
-    
-    Questa combinazione di grafici consente una visualizzazione chiara e dettagliata delle informazioni sul traffico aereo, utile per analizzare e confrontare i dati relativi ai voli in modo dinamico e interattivo.
+    - :blue-background[Flight Status Bar Chart]: Displays the number of flights for each month of the year, broken down by flight status (on time, delayed, cancelled and diverted). This chart makes it easy to understand monthly trends and the distribution of different flight statuses.
+    - :blue-background[Weekly Heat Map]: Displays the number of flights for each day of the week, broken down by month. Using a heat map helps you identify the busiest periods for the week and month, with a clear visual representation of weekly fluctuations.
+    - :blue-background[Geographic Flight Map by City]: Represents the distribution of flights in the busiest cities. Each city is represented by a marker that varies in size and color based on the number of flights, providing a geographical overview of air traffic at a national level.
+
+    This combination of charts provides a clear and detailed visualization of air traffic information, useful for analyzing and comparing flight data in a dynamic and interactive way.
     """)
 
 # PARTE 1
@@ -52,47 +52,46 @@ list_df_columns = list(df.columns)
 fig1 = px.bar(df,
               x=list_df_columns[0],
               y=list_df_columns[1:],
-              labels={"value": "Numero di voli", "variable": "Stato del volo"},
+              labels={"value": "Number of flights", "variable": "Flight status"},
               barmode="stack")
 
 fig1.update_layout(
-    xaxis_title=dict(text="Mese", font=dict(weight="bold")),
-    yaxis_title=dict(text="Numero di voli", font=dict(weight="bold")),
-    legend_title=dict(text="<b>Stato del volo</b>"  # Testo della legenda in grassetto
-                      )
+    xaxis_title=dict(text="Month", font=dict(weight="bold")),
+    yaxis_title=dict(text="Number of flights", font=dict(weight="bold")),
+    legend_title=dict(text="<b>Flight status</b>")
 )
 
-st.markdown("### :blue[Grafico a barre sullo stato dei voli]")
+st.markdown("### :blue[Flight Status Bar Graph]")
 st.plotly_chart(fig1)
 
 # PARTE 2
 data_mese_numvolisettimana = query_mesi_voli_settimana()
 
 fig2 = px.imshow(data_mese_numvolisettimana,
-                 labels=dict(x="Mese", y="Giorno Settimana", color="Numero Voli"),
+                 labels=dict(x="Month", y="Day Week", color="Number of Flights"),
                  x=mesi,
-                 y=["lunedi", "martedi", "mercoledi", "giovedi", "venerdi", "sabato", "domenica"],
+                 y=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
                  )
 
 fig2.update_layout(
-    xaxis_title=dict(text="Mese", font=dict(weight="bold")),
-    yaxis_title=dict(text="Giorno Settimana", font=dict(weight="bold")),
-    coloraxis_colorbar=dict(title=dict(text="Numero Voli", font=dict(weight="bold"))),
-    width=2000,  # Specifica la larghezza in pixel
-    height=550  # Specifica l'altezza in pixel
+    xaxis_title=dict(text="Month", font=dict(weight="bold")),
+    yaxis_title=dict(text="Day Week", font=dict(weight="bold")),
+    coloraxis_colorbar=dict(title=dict(text="Number of Flights", font=dict(weight="bold"))),
+    width=2000,
+    height=550 
 )
 
-st.markdown("""### :blue[Mappa di calore settimanale]""")
+st.markdown("""### :blue[Weekly heat map]""")
 st.plotly_chart(fig2)
 
 # PARTE 3
 df = query_citta_num_voli()
-df['testo'] = df['citta'] + ' traffico: ' + df['num'].astype(str)
+df['text'] = df['city'] + ' traffic: ' + df['num'].astype(str)
 fig3 = go.Figure(data=go.Scattergeo(
     locationmode='country names',
     lon=df['lon'],
     lat=df["lat"],
-    text=df['testo'],
+    text=df['text'],
     mode='markers',
     marker=dict(
         size=8,
@@ -110,7 +109,7 @@ fig3 = go.Figure(data=go.Scattergeo(
         cmax=df["num"].max(),
         colorbar=dict(
             title=dict(
-                text="Voli totali per ogni città"
+                text="Total flights to each city"
             )
         )
     )))
@@ -128,11 +127,11 @@ fig3.update_layout(
     ),
 )
 
-st.markdown("""### :blue[Mappa geografica dei voli per città]""")
+st.markdown("""### :blue[Geographic map of flights by city]""")
 
 a, b = st.columns(2)
 
-df1 = df[["citta", "num"]]
+df1 = df[["city", "num"]]
 with a:
     st.dataframe(df1.sort_values(by=["num"], ascending=False))
 

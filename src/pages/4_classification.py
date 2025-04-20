@@ -10,9 +10,9 @@ import plotly.express as px
 def plot_confusion_matrix(cm):
     figs = px.imshow(cm, text_auto=True, color_continuous_scale="Blues")
     figs.update_layout(
-        title="Matrice di Confusione",
-        xaxis=dict(title="Etichette Predette", side="bottom"),
-        yaxis=dict(title="Etichette Reali")
+        title="Confusion matrix",
+        xaxis=dict(title="Predicted Labels", side="bottom"),
+        yaxis=dict(title="Real Labels")
     )
 
     figs.update_layout(
@@ -24,23 +24,25 @@ def plot_confusion_matrix(cm):
     return figs
 
 
-st.set_page_config(page_title="Classificazione ML", layout="wide")
-st.title(":blue[Classificazione ML]")
+st.set_page_config(page_title="ML Classification", layout="wide")
+st.title(":blue[ML Classification]")
 
 st.markdown(
-    """:blue[Questa pagina permette di addestrare un modello di classificazione con l'obiettivo di prevedere il 
-    ritardo di un volo.  Terminato l'addestramento è possibile visualizzare alcune metriche che indicano la bontà del 
-    modello addestrato.] """)
+    """:blue[This page allows you to train a classification model with the goal of predicting the 
+        delay of a flight. Once training is complete, you can view some metrics that indicate the 
+        goodness of the trained model.]
+    """)
+
 df = preprocessing_for_classification()
-avvia_training = st.sidebar.button("Addestra Modello")
+avvia_training = st.sidebar.button("Train Model")
 
 if avvia_training:
-    with st.spinner("Addestramento in corso... Questo potrebbe richiedere 5 minuti."):
+    with st.spinner("Training in progress... This may take 5 minutes."):
         model = train_random_forest_model(df)
 
-    st.success("Addestramento completato con successo!")
+    st.success("Training completed successfully!")
 
-    st.markdown("# :blue[Metriche del Modello]")
+    st.markdown("# :blue[Model Metrics]")
 
     confusion_matrix_array, accuracy, f1_score, precision, recall = evaluate_model_performance(model)
     fig = plot_confusion_matrix(confusion_matrix_array)

@@ -15,5 +15,5 @@ def most_traffic_city(df: DataFrame) -> DataFrame:
             longitudine = coor[1]
             val1, val2 = calculate_departure_arrival_counts(df, city_name)
             num = val1 + val2
-            results.append({"citta": city_name, "lat": latitudine, "lon": longitudine, "num": num})
+            results.append({"city": city_name, "lat": latitudine, "lon": longitudine, "num": num})
     return pd.DataFrame(results)

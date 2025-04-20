@@ -56,53 +56,52 @@ def create_dataframe_pandas_to_visualize_aeroportiCitta_num_voliPartenzeArrivi(a
     return df_pandas
 
 
-st.set_page_config(page_title="Statistiche aeroporti", layout="wide")
-st.title(":blue[Statistiche aeroporti]")
+st.set_page_config(page_title="Airport statistics", layout="wide")
+st.title(":blue[Airport statistics]")
 
 st.markdown("""
-Benvenuto nella sezione dedicata all'analisi delle statistiche aeroportuali. 
-Qui puoi selezionare la tua città di interesse e visualizzare informazioni utili come il numero di voli in partenza e in arrivo, i ritardi medi registrati e le destinazioni più frequentate.""")
+Welcome to the section dedicated to the analysis of airport statistics.
+Here you can select your city of interest and view useful information such as the number of departing and arriving flights, average delays recorded and the most popular destinations.""")
 
-with st.expander("maggiori informazioni"):
+with st.expander("More information"):
     st.markdown("""
-    Funzionalità principali:
-    - :blue-background[Metriche di traffico aereo]: scopri il numero totale di voli in partenza e in arrivo per la città selezionata.
-    
-    - :blue-background[Analisi dei ritardi]: visualizza i ritardi medi dei voli in partenza e in arrivo tramite grafici intuitivi.
-    
-    - :blue-background[Analisi del Traffico Aereo per Aeroporto]: visualizza il numero di voli in partenza e arrivo per ciascun aeroporto appartenente alla citta selezionata.
-    
-    - :blue-background[Destinazioni più popolari]: esplora le destinazioni più frequenti con un massimo di 10 località, rappresentate in un grafico a barre interattivo.
-    - :blue-background[Mappa delle destinazioni]: osserva sulla mappa le località di destinazione dei voli in partenza dalla città scelta.
-    
+    Key Features:
+    - :blue-background[Air Traffic Metrics]: Discover the total number of flights departing and arriving for the selected city.
+
+    - :blue-background[Delay Analysis]: View the average delays of departing and arriving flights through intuitive graphs.
+
+    - :blue-background[Air Traffic Analysis by Airport]: View the number of flights departing and arriving for each airport belonging to the selected city.
+
+    - :blue-background[Most Popular Destinations]: Explore the most frequent destinations with up to 10 locations, represented in an interactive bar graph.
+    - :blue-background[Destination Map]: View the destination locations of flights departing from the selected city on the map.
     """)
 
 lista_ordinata_citta = get_sorted_city_list()
 
-citta = st.sidebar.selectbox('Seleziona una città', lista_ordinata_citta, index=None)
+citta = st.sidebar.selectbox('Select a city', lista_ordinata_citta, index=None)
 
-nmaxfreq = st.sidebar.select_slider("Seleziona il numero di destinazioni piu frequenti da visualizzare",
+nmaxfreq = st.sidebar.select_slider("Select the number of most frequent destinations to display",
                                     options=[None] + [i for i in range(1, 11)])
 
 visualizza = False
 if (citta and nmaxfreq):
-    visualizza = st.sidebar.button("Calcola")
+    visualizza = st.sidebar.button("Calculate")
 
 if visualizza:
     a, b = st.columns(2)
     numvoli_partenza, numvoli_arrivo = query_numero_partenze_e_arrivi_citta(citta)
 
-    a.metric("Numero partenze", numvoli_partenza, border=True)
-    b.metric("Numero arrivi ", numvoli_arrivo, border=True)
+    a.metric("Number of departures", numvoli_partenza, border=True)
+    b.metric("Number of arrivals", numvoli_arrivo, border=True)
 
     lista_ritardi = query_ritardo_medio_partenza_arrivo_citta(citta)
     chart_ritardi_data = create_dataframe_pandas_to_visualize_delays(lista_ritardi)
-    st.markdown("### :blue[Ritardi Medi per Partenze e Arrivi]")
+    st.markdown("### :blue[Average Delays for Departures and Arrivals]")
     st.bar_chart(chart_ritardi_data)
 
     aeroporti_numvoli = query_citta_numvoli_aeroporto(citta)
     aerorti_num_voli_pd = create_dataframe_pandas_to_visualize_aeroportiCitta_num_voliPartenzeArrivi(aeroporti_numvoli)
-    st.markdown("### :blue[Analisi del Traffico Aereo per Aeroporto della Città]")
+    st.markdown("### :blue[Air Traffic Analysis for City Airport]")
     col1, col2 = st.columns(2)
     with col1:
         st.bar_chart(aerorti_num_voli_pd, use_container_width=True)
@@ -127,11 +126,11 @@ if visualizza:
 
     dest_numvoli = query_destinazione_numvoli_citta(citta)
     chart_destmaxfreq_data = create_dataframe_pandas_to_visualize_nmaxdestfrequenti(dest_numvoli, nmaxfreq)
-    st.markdown("### :blue[Destinazioni Più Frequenti]")
+    st.markdown("### :blue[Most Popular Destinations]")
     st.bar_chart(chart_destmaxfreq_data, horizontal=True)
 
     destinazioni = list(dest_numvoli.keys())
-    st.markdown(f"### :blue[Possibili destinazioni da: {citta}]")
+    st.markdown(f"### :blue[Possibile destination from: {citta}]")
     fig = px.scatter_mapbox(
         create_dataframe_pandas_to_visualize_city_coordinates(destinazioni),
         lat='lat',

@@ -11,31 +11,32 @@ import plotly.graph_objects as go
 mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
         'november', 'december']
 
-st.set_page_config(page_title="Statistiche mensili", layout="wide")
-st.sidebar.header(":blue[Statistiche mensili]")
+st.set_page_config(page_title="Monthly statistics", layout="wide")
+st.sidebar.header(":blue[Monthly statistics]")
 
-st.title(":blue[Statistiche mensili]")
+st.title(":blue[Monthly statistics]")
 
 st.markdown(
-    "Questa piattaforma ti permette di esplorare in modo intuitivo e interattivo i dati relativi ai voli per un "
-    ":blue-background[mese] specifico.")
-with st.expander("maggiori informazioni"):
+"This platform allows you to explore flight data for a specific "
+":blue-background[month] in an intuitive and interactive way.")
+
+with st.expander("more information"):
     st.markdown('''
-        Attraverso grafici chiari e metriche dettagliate, puoi analizzare:
-        - Numero totale di voli
-        - Ritardo medio
-        - Distanza media percorsa
-        - Durata media dei voli
-        
-        Inoltre, troverai:
-        - Una classificazione dei ritardi in fasce temporali.
-        - Una panoramica dello stato dei voli (in orario, cancellati, dirottati, in ritardo).
-        - Le principali cause dei ritardi rappresentate graficamente.
-        
-        Scopri le tendenze mensili e ottieni una visione completa e dettagliata del traffico aereo mensile!
+        Through clear graphs and detailed metrics, you can analyze:
+        - Total number of flights
+        - Average delay
+        - Average distance traveled
+        - Average flight duration
+
+        In addition, you will find:
+        - A classification of delays in time bands.
+        - An overview of the status of flights (on time, cancelled, diverted, delayed).
+        - The main causes of delays represented graphically.
+
+        Discover monthly trends and get a complete and detailed view of monthly air traffic!
     ''')
 
-mese = st.sidebar.selectbox('Seleziona un mese', mesi, index=None)
+mese = st.sidebar.selectbox('Select a month', mesi, index=None)
 
 if mese:
     mese_numero = mesi.index(mese) + 1
@@ -45,11 +46,11 @@ if mese:
     a, b = st.columns(2)
     c, d = st.columns(2)
 
-    if mese == "gennaio":
-        a.metric("Numero voli", lista_avg[0], delta=0.0, delta_color="off", border=True)
-        b.metric("Ritardo medio", f"{lista_avg[1]} min", delta=0.0, delta_color="off", border=True)
-        c.metric("Distanza media", f"{lista_avg[2]} miglia", delta=0.0, delta_color="off", border=True)
-        d.metric("Media minuti di volo", f"{lista_avg[3]} min", delta=0.0, delta_color="off", border=True)
+    if mese == "january":
+        a.metric("Number of flights", lista_avg[0], delta=0.0, delta_color="off", border=True)
+        b.metric("Average delay", f"{lista_avg[1]} min", delta=0.0, delta_color="off", border=True)
+        c.metric("Average distance", f"{lista_avg[2]} miglia", delta=0.0, delta_color="off", border=True)
+        d.metric("Average flight minutes", f"{lista_avg[3]} min", delta=0.0, delta_color="off", border=True)
 
     else:
         df_mese_precedente = build_month_dataframe(month_from_number(previous_month(mese)))
@@ -58,28 +59,28 @@ if mese:
         perritardomedio = round((((lista_avg[1] - lista_avg_precedente[1]) / lista_avg_precedente[1]) * 100), 2)
         perdistanzamedia = round((((lista_avg[2] - lista_avg_precedente[2]) / lista_avg_precedente[2]) * 100), 2)
         permediaminutivolo = round((((lista_avg[3] - lista_avg_precedente[3]) / lista_avg_precedente[3]) * 100), 2)
-        a.metric("Numero voli", lista_avg[0], delta=f"{pernumvoli} %", border=True)
-        b.metric("Ritardo medio", f"{lista_avg[1]} min", delta=f"{perritardomedio} %", border=True)
-        c.metric("Distanza media", f"{lista_avg[2]} miglia", delta=f"{perdistanzamedia} %", border=True)
-        d.metric("Media minuti di volo", f"{lista_avg[3]} min", delta=f"{permediaminutivolo} %", border=True)
+        a.metric("Number of flights", lista_avg[0], delta=f"{pernumvoli} %", border=True)
+        b.metric("Average delay", f"{lista_avg[1]} min", delta=f"{perritardomedio} %", border=True)
+        c.metric("Average distance", f"{lista_avg[2]} miglia", delta=f"{perdistanzamedia} %", border=True)
+        d.metric("Average flight minutes", f"{lista_avg[3]} min", delta=f"{permediaminutivolo} %", border=True)
 
     categorie = ["0-15", "16-30", "31-45", "46-60", "60+"]
     range_ritardi = calculateFlightDelayRange(df_mese)
 
     df_bar = pd.DataFrame({
-        "Categorie": categorie,
-        "Ritardi": range_ritardi
+        "Categories": categorie,
+        "Delays": range_ritardi
     })
 
     col1, col2 = st.columns(2)
 
     with col1:
-        st.markdown("""### :blue[Classificazione dei ritardi in fasce temporali]""")
-        st.bar_chart(df_bar.set_index("Categorie")["Ritardi"])
+        st.markdown("""### :blue[Classification of delays in time bands]""")
+        st.bar_chart(df_bar.set_index("Categories")["Delays"])
 
     with col2:
         info_voli_mese = monthly_flight_statistics(df_mese)
-        labels = ['Orario', 'Cancellati', 'Dirottati', 'Ritardi']
+        labels = ['Time', 'Canceled', 'Diverted', 'Delays']
 
         fig = go.Figure(
             data=[go.Pie(labels=labels, values=info_voli_mese, hole=0.3, domain={'x': [0, 1], 'y': [0, 1]})])
@@ -87,11 +88,11 @@ if mese:
         fig.update_traces(textinfo='percent+label',
                           pull=[0.1, 0.3, 0.3, 0.1])
 
-        st.markdown("""### :blue[Stato dei voli]""")
+        st.markdown("""### :blue[Flight status]""")
         st.plotly_chart(fig)
 
     cause_ritardi = causes_delay(df_mese)
-    df_cause_ritardi = pd.DataFrame(list(cause_ritardi.items()), columns=['Causa', 'Numero di Ritardi'])
+    df_cause_ritardi = pd.DataFrame(list(cause_ritardi.items()), columns=['Cause', 'Number of Delays'])
 
-    st.markdown("""### :blue[Principali cause dei ritardi]""")
-    st.bar_chart(df_cause_ritardi.set_index('Causa'), horizontal=True)
+    st.markdown("""### :blue[Main causes of delays]""")
+    st.bar_chart(df_cause_ritardi.set_index('Cause'), horizontal=True)
