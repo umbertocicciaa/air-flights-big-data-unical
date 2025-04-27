@@ -59,10 +59,11 @@ services:
         ports:
             - "8081:8081"
         environment:
-            - "SPARK_MASTER=spark://spark-master:7077"
+            - SPARK_MASTER=spark://spark-master:7077
             - SPARK_MODE=worker
+            - SPARK_WORKER_WEBUI_PORT=8081
         networks:
-             - hadoop
+            - hadoop
 
     app:
         image: airflights:latest
@@ -78,9 +79,9 @@ services:
         networks:
             - hadoop
         ports:
-          - 8501:8501
+            - 8501:8501
         volumes:
-          - ./shared-filesystem:/mnt/shared-filesystem:rw
+            - ./shared-filesystem:/mnt/shared-filesystem:rw
 
 volumes:
     hadoop_namenode:
