@@ -25,13 +25,13 @@ This project is part of the Air Flights Big Data Unical initiative. It focuses o
    cd src/src_backend
    ```
 
-# Streamlit Multipage
+## Streamlit Multipage
 
 This project is a Streamlit multipage designed for exploring and analyzing data in Parquet format. It integrates with an ETL microservice to load and process data efficiently.
 
 ## Project Structure
 
-```
+```txt
 src_frontend
 ├── src
 │   ├── pages
@@ -54,20 +54,20 @@ src_frontend
 
 1. Clone the repository:
 
-   ```
+   ```bash
    git clone <repository-url>
    cd src/src_frontend
    ```
 
 2. Install the required dependencies:
 
-   ```
+   ```bash
    pip install -r requirements.txt
    ```
 
 3. Run the Streamlit application:
 
-   ```
+   ```bash
    streamlit run src/home.py
    ```
 
