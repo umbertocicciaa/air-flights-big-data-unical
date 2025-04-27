@@ -14,10 +14,13 @@ This project is part of the Air Flights Big Data Unical initiative. It focuses o
 ## Installation
 
 1. Clone the repository:
+
    ```bash
    git clone https://github.com/your-repo/air-flights-big-data-unical.git
    ```
+
 2. Navigate to the backend directory:
+
    ```bash
    cd src/src_backend
    ```
@@ -50,17 +53,20 @@ src_frontend
 ## Setup Instructions
 
 1. Clone the repository:
+
    ```
    git clone <repository-url>
    cd src/src_frontend
    ```
 
 2. Install the required dependencies:
+
    ```
    pip install -r requirements.txt
    ```
 
 3. Run the Streamlit application:
+
    ```
    streamlit run src/home.py
    ```
