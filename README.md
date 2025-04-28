@@ -29,3 +29,9 @@ To run the project locally, use Docker Compose:
 export JAVA_HOME=$(/usr/libexec/java_home -v 11)
 docker compose up
 ```
+
+## Local installation hadoop and spark
+
+Utilies urls.
+<https://medium.com/@MinatoNamikaze02/installing-hadoop-on-macos-m1-m2-2023-d963abeab38e>
+<https://medium.com/@le.oasis/setting-up-apache-spark-on-macos-a-comprehensive-guide-78af7642deb1>
