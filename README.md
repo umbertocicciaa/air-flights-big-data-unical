@@ -21,12 +21,22 @@ git clone https://github.com/umbertocicciaa/air-flights-big-data-unical.git
 cd air-flights-big-data-unical
 ```
 
-## Usage
+## Usage in local
+
+To run the project locally:
+
+```sh
+set -a
+source .env
+set +a
+python3 src/run.py
+```
+
+## Usage with docker compose
 
 To run the project locally, use Docker Compose:
 
 ```sh
-export JAVA_HOME=$(/usr/libexec/java_home -v 11)
 docker compose up
 ```
 
