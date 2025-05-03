@@ -3,7 +3,8 @@ from etl.etl import etl_process
 from utils.hadoopfs import upload_to_hdfs
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="src_backend/local.env")
+env_file = os.getenv("ENV", "./local.env")
+load_dotenv(dotenv_path=env_file)
 
 os.makedirs(os.getenv("LOGS_PATH", "/mnt/shared-filesystem/logs/"), exist_ok=True)
 local_input_path = os.getenv("LOCAL_INPUT_PATH", "/mnt/shared-filesystem/inputs/")

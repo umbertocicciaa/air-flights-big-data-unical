@@ -1,8 +1,9 @@
-import sys
+import os
 import streamlit as st
 from dotenv import load_dotenv
 
-load_dotenv(dotenv_path="src_frontend/local.env")
+env_file = os.getenv("ENV", "./local.env")
+load_dotenv(dotenv_path=env_file)
 
 
 st.title("Home")
