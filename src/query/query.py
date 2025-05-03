@@ -27,13 +27,13 @@ def build_all_dataframe():
     return create_all_dataframe(spark_session)
 
 
-def query_numero_partenze_e_arrivi_citta(citta: str):
+def query_numero_partenze_e_arrivi_citta(citta):
     return calculate_departure_arrival_counts(build_all_dataframe(), citta)
 
 
-def query_ritardo_medio_partenza_arrivo_citta(citta: str) -> list[list[float]]:
+def query_ritardo_medio_partenza_arrivo_citta(citta):
     ritardi_medi = [[], []]
-    for i in range(1, 13):
+    for i in range(0, 12):
         df = build_month_dataframe(i)
         df_mese_from_city = df.filter((df["OriginCityName"] == citta))
         df_mese_to_city = df.filter((df["DestCityName"] == citta))
@@ -44,15 +44,15 @@ def query_ritardo_medio_partenza_arrivo_citta(citta: str) -> list[list[float]]:
     return ritardi_medi
 
 
-def query_destinazione_numvoli_citta(aeroporto: str):
+def query_destinazione_numvoli_citta(aeroporto):
     return destinations_number_city(build_all_dataframe(), aeroporto)
 
 
-def query_citta_numvoli_aeroporto(citta: str):
+def query_citta_numvoli_aeroporto(citta):
     return city_flight_airport(build_all_dataframe(), citta)
 
 
-def query_get_volo(data: datetime.date, origine: str, destinazione: str, ora: datetime.time):
+def query_get_volo(data, origine, destinazione, ora):
     return get_flight(preprocess_data(build_all_dataframe()), data, origine, destinazione, ora)
 
 
@@ -82,11 +82,11 @@ def query_mesi_voli_settimana():
     return giorni_settimana_numvoli
 
 
-def query_citta_num_voli() -> pd.DataFrame:
+def query_citta_num_voli():
     return most_traffic_city(build_all_dataframe())
 
 
-def preprocessing_for_classification() -> DataFrame:
+def preprocessing_for_classification():
     return build_train_dataframe(build_all_dataframe())
 
 
@@ -94,7 +94,7 @@ columns = ["DepDelay", "ArrDelay", "flight_duration"]
 columns_clustering = ["DepDelay", "ArrDelay"]
 
 
-def preprocessing_clustering(df: DataFrame) -> DataFrame:
+def preprocessing_clustering(df):
     df_new = df.filter(
         (col("Cancelled") == 0) &
         (col("Diverted") == 0)

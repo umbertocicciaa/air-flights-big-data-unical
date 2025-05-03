@@ -1,9 +1,8 @@
 import logging
 import os
 
-
 log_level = os.getenv('LOG_LEVEL', 'INFO')
-log_file_path = os.getenv('LOG_FILE_PATH', '/mnt/shared-filesystem/logs/')
+log_file_path = os.getenv('LOG_PATH', 'shared-filesystem/logs/')
 
 logging.basicConfig(
     level=getattr(logging, log_level.upper(), logging.INFO),

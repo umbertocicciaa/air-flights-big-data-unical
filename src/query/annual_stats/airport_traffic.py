@@ -4,7 +4,7 @@ from query.airports_analysis.fligth_numbers import calculate_departure_arrival_c
 from utils.utils import get_coordinates_city
 
 
-def most_traffic_city(df: DataFrame) -> DataFrame:
+def most_traffic_city(df):
     city = ["Atlanta, GA", "Dallas/Fort Worth, TX", "Denver, CO", "Chicago, IL", "Charlotte, NC","Orlando, FL", "Las Vegas, NV", "Phoenix, AZ", "New York, NY", "Seattle, WA"]
 
     results = []
