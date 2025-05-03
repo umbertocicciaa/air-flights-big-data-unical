@@ -27,7 +27,7 @@ To run the project locally:
 
 ```sh
 set -a
-source .env
+source src/$ENV.env
 set +a
 python3 src/run.py
 ```
