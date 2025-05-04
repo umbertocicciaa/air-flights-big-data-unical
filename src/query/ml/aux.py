@@ -9,7 +9,7 @@ selected_columns = [
 ]
 
 
-def build_train_dataframe(df: DataFrame) -> DataFrame:
+def build_train_dataframe(df: DataFrame):
     df1 = df.select(selected_columns).dropna() \
         .withColumnRenamed("ArrDel15", "target") \
         .withColumn("CRSDepTime", lpad(col("CRSDepTime").cast("string"), 4, "0").substr(1, 2).cast("int")) \

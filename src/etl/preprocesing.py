@@ -1,7 +1,7 @@
 from pyspark.sql.functions import to_timestamp, lpad, col
+from pyspark.sql import DataFrame
 
-
-def preprocess_data(df):
+def preprocess_data(df : DataFrame):
     selected_columns = ["Year", "Quarter", "Month", "DayofMonth", "DayOfWeek", "FlightDate", "Reporting_Airline",
                         "Tail_Number", "Flight_Number_Reporting_Airline", "OriginAirportID", "Origin", "OriginCityName",
                         "OriginStateName", "DestAirportID", "Dest", "DestCityName", "DestStateName", "CRSDepTime",

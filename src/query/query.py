@@ -1,5 +1,3 @@
-from datetime import datetime
-import pandas as pd
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col
 from utils.data_visualization import create_month_dataframe, create_all_dataframe
@@ -20,18 +18,18 @@ spark_session = create_session()
 
 
 def build_month_dataframe(mese: int):
-    return create_month_dataframe(spark_session, mese)
+    return create_month_dataframe(mese)
 
 
 def build_all_dataframe():
-    return create_all_dataframe(spark_session)
+    return create_all_dataframe()
 
 
-def query_numero_partenze_e_arrivi_citta(citta):
+def query_numero_partenze_e_arrivi_citta(citta : str):
     return calculate_departure_arrival_counts(build_all_dataframe(), citta)
 
 
-def query_ritardo_medio_partenza_arrivo_citta(citta):
+def query_ritardo_medio_partenza_arrivo_citta(citta : str):
     ritardi_medi = [[], []]
     for i in range(0, 12):
         df = build_month_dataframe(i)
@@ -44,15 +42,15 @@ def query_ritardo_medio_partenza_arrivo_citta(citta):
     return ritardi_medi
 
 
-def query_destinazione_numvoli_citta(aeroporto):
+def query_destinazione_numvoli_citta(aeroporto : str):
     return destinations_number_city(build_all_dataframe(), aeroporto)
 
 
-def query_citta_numvoli_aeroporto(citta):
+def query_citta_numvoli_aeroporto(citta : str):
     return city_flight_airport(build_all_dataframe(), citta)
 
 
-def query_get_volo(data, origine, destinazione, ora):
+def query_get_volo(data, origine:str, destinazione : str, ora):
     return get_flight(preprocess_data(build_all_dataframe()), data, origine, destinazione, ora)
 
 

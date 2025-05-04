@@ -1,4 +1,3 @@
-from logs.logger import logger
 from utils.session_spark import create_session
 
 

@@ -1,4 +1,3 @@
-import os
 import streamlit as st
 from utils.datasets import read_parquet
 
@@ -14,13 +13,14 @@ def analyze_data(dataframe):
     filter_value = st.sidebar.text_input("Enter Value to Filter")
 
     if filter_value:
-        filtered_data = dataframe[dataframe[column_to_filter].astype(str).str.contains(filter_value, na=False)]
+        filtered_data = dataframe.filter(dataframe[column_to_filter].cast("string") == filter_value)
         st.write("Filtered Data", filtered_data)
 
     st.sidebar.header("Visualization Options")
     if st.sidebar.button("Show Histogram"):
         column_to_plot = st.sidebar.selectbox("Select Column for Histogram", dataframe.columns)
-        st.bar_chart(dataframe[column_to_plot].value_counts())
+        dataset = dataframe[column_to_plot]
+        st.bar_chart(dataset.value_counts())
 
 
 st.title("Data Analysis")

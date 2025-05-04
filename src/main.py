@@ -1,6 +1,6 @@
 import os
 from etl.etl import etl_process
-from utils.hadoopfs import upload_to_hdfs
+#from utils.hadoopfs import upload_to_hdfs
 from dotenv import load_dotenv
 
 env_file = os.getenv("ENV", "./local.env")

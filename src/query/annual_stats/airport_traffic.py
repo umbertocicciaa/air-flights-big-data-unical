@@ -1,10 +1,10 @@
 import pandas as pd
-from pandas import DataFrame
+from pyspark.sql import DataFrame
 from query.airports_analysis.fligth_numbers import calculate_departure_arrival_counts
 from utils.utils import get_coordinates_city
 
 
-def most_traffic_city(df):
+def most_traffic_city(df : DataFrame):
     city = ["Atlanta, GA", "Dallas/Fort Worth, TX", "Denver, CO", "Chicago, IL", "Charlotte, NC","Orlando, FL", "Las Vegas, NV", "Phoenix, AZ", "New York, NY", "Seattle, WA"]
 
     results = []

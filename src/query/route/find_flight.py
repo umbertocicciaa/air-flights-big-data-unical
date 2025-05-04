@@ -3,7 +3,7 @@ from pyspark.sql import DataFrame
 from pyspark.sql.functions import lit, to_timestamp
 
 
-def get_flight(df: DataFrame, data: datetime.date, origine: str, destinazione: str, ora: datetime.time) -> DataFrame:
+def get_flight(df: DataFrame, data: datetime.date, origine: str, destinazione: str, ora: datetime.time):
     ora_ts = to_timestamp(lit(ora.strftime("%H:%M")), "HH:mm")
     voliFiltrati = df.filter(df["FlightDate"] == data).filter(df["OriginCityName"] == origine).filter(
         df["DestCityName"] == destinazione).filter(df["CRSDepTime"] == ora_ts)
@@ -15,13 +15,13 @@ def get_flight(df: DataFrame, data: datetime.date, origine: str, destinazione: s
                                "Div4Airport", "Div5Airport")
 
 
-def get_flight_advanced_delay(df: DataFrame) -> DataFrame:
+def get_flight_advanced_delay(df: DataFrame):
     return df.filter(df["ArrDelayMinutes"] <= 0)
 
 
-def get_flight_advanced_canc(df: DataFrame) -> DataFrame:
+def get_flight_advanced_canc(df: DataFrame):
     return df.filter(df["Cancelled"] == 0)
 
 
-def get_flight_advanced_div(df: DataFrame) -> DataFrame:
+def get_flight_advanced_div(df: DataFrame):
     return df.filter(df["Diverted"] == 0)
