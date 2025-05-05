@@ -14,9 +14,9 @@ path ="shared-filesystem/outputs"
 data = read_parquet(path)
 
 if data is not None:
+    numeric_columns = [col for col, dtype in data.dtypes if dtype in ('double', 'int')]
 
     st.write("Dispersion Plot:")
-    numeric_columns = data.select_dtypes(include=['float64', 'int64']).columns
     selected_x = st.selectbox("Select X-axis variable", numeric_columns)
     selected_y = st.selectbox("Select Y-axis variable", numeric_columns)
     

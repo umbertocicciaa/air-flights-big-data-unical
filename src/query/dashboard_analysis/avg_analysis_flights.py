@@ -6,22 +6,22 @@ def average(df: DataFrame):
     not_diverted = df.filter(col('Diverted') == 0)
     diverted = df.filter(col('Diverted') != 0)
 
-    avg = {}
+    averages = {}
 
-    avg['average_delay_direct'] = df.dropna(subset=['ArrDelayMinutes']) \
+    averages['average_delay_direct'] = df.dropna(subset=['ArrDelayMinutes']) \
         .filter(col('ArrDelayMinutes') > 0) \
-        .agg(avg("ArrDelayMinutes")).collect()[0][0]
+        .agg({"ArrDelayMinutes": "avg"}).collect()[0][0]
 
-    avg['average_delay_diverted'] = df.dropna(subset=['DivArrDelay']) \
-        .agg(avg("DivArrDelay")).collect()[0][0]
+    averages['average_delay_diverted'] = df.dropna(subset=['DivArrDelay']) \
+        .agg({"DivArrDelay": "avg"}).collect()[0][0]
 
-    avg['average_distance_direct'] = not_diverted.agg(avg("Distance")).collect()[0][0]
-    avg['average_distance_diverted'] = diverted.agg(avg("DivDistance")).collect()[0][0]
+    averages['average_distance_direct'] = not_diverted.agg({"Distance": "avg"}).collect()[0][0]
+    averages['average_distance_diverted'] = diverted.agg({"DivDistance": "avg"}).collect()[0][0]
 
-    avg['average_flight_minutes_direct'] = df.agg(avg("ActualElapsedTime")).collect()[0][0]
-    avg['average_flight_minutes_diverted'] = df.agg(avg("DivActualElapsedTime")).collect()[0][0]
+    averages['average_flight_minutes_direct'] = df.agg({"ActualElapsedTime": "avg"}).collect()[0][0]
+    averages['average_flight_minutes_diverted'] = df.agg({"DivActualElapsedTime": "avg"}).collect()[0][0]
 
-    return avg
+    return averages
 
 
 def calculate_monthly_flight_statistics(df: DataFrame):

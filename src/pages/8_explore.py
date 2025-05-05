@@ -11,19 +11,19 @@ def explore_data():
     #path =f"{hdfs_input_path}outputs"
     path ="shared-filesystem/outputs"
     data = read_parquet(path)
-
     if data is not None:
         st.write("Data Overview:")
-        st.dataframe(data.head())
+        st.dataframe(data.limit(5))
 
         st.write("Summary Statistics:")
-        st.write(data.describe())
+        st.dataframe(data.describe())
 
         st.write("Select a column to visualize:")
         column = st.selectbox("Column", data.columns)
 
         if column:
-            st.bar_chart(data[column].value_counts())
+            column_data = data.groupBy(column).count()
+            st.bar_chart(column_data)
     else:
         st.error("Failed to load data.")
 

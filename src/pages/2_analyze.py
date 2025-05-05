@@ -1,5 +1,6 @@
 import streamlit as st
 from utils.datasets import read_parquet
+from pyspark.sql.functions import col, count
 
 #hdfs_input_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/")
 
@@ -20,7 +21,9 @@ def analyze_data(dataframe):
     if st.sidebar.button("Show Histogram"):
         column_to_plot = st.sidebar.selectbox("Select Column for Histogram", dataframe.columns)
         dataset = dataframe[column_to_plot]
-        st.bar_chart(dataset.value_counts())
+        if dataset is not None:
+            value_counts = dataframe.groupBy(col(column_to_plot)).agg(count("*").alias("count")).toPandas()
+            st.bar_chart(value_counts.set_index(column_to_plot))
 
 
 st.title("Data Analysis")

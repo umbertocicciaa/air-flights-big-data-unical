@@ -56,7 +56,7 @@ def query_get_volo(data, origine:str, destinazione : str, ora):
 
 def query_mesi_stato_voli():
     numero_stato_voli = [[], [], [], []]
-    for i in range(1, 13):
+    for i in range(0, 12):
         df = build_month_dataframe(i)
         stato_voli_mese = monthly_flight_statistics(df)
         numero_stato_voli[0].append(stato_voli_mese[0])
@@ -70,7 +70,7 @@ def query_mesi_voli_settimana():
     num_giorni_settimana = 7
     giorni_settimana_numvoli = [[] for _ in range(num_giorni_settimana)]
 
-    for i in range(1, 13):
+    for i in range(0, 12):
         df = build_month_dataframe(i)
         lista_numvoli_settimana = get_weekly_flight_counts(df)
 

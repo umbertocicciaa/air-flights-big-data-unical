@@ -1,7 +1,7 @@
 import streamlit as st
 import plotly.express as px
 from query.query import build_month_dataframe, clustering_flights, preprocessing_clustering
-from utils.utils import month_from_number
+from utils.utils import number_from_month
 
 
 def view_clustering_k(dataframes, k_centr):
@@ -35,7 +35,7 @@ st.write(":blue[This page shows the K-means clustering visualization for differe
 mese = st.sidebar.selectbox('Select month', mesi, index=None)
 
 if mese:
-    mese_number = int(month_from_number(mese))
+    mese_number = number_from_month(mese)
     df = build_month_dataframe(mese_number)
     df_subsets = df.sample(fraction=0.25)
     df_clustering = preprocessing_clustering(df_subsets)

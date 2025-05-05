@@ -2,23 +2,24 @@ import locale
 import os
 import airportsdata
 import pandas as pd
-from geopy import Nominatim
 from datetime import datetime, timedelta
 
 
+def number_from_month(month):
+    months = {
+        "january": 1, "february": 2, "march": 3, "april": 4,
+        "may": 5, "june": 6, "july": 7, "august": 8,
+        "september": 9, "october": 10, "november": 11, "december": 12
+    }
+    return months.get(month.lower(), "month not valid")
+
 def month_from_number(number):
     months = {
-        1: "january", 2: "february", 3: "march", 4: "april",
-        5: "may", 6: "june", 7: "july", 8: "august",
-        9: "september", 10: "october", 11: "november", 12: "december"
+        1: "January", 2: "February", 3: "March", 4: "April",
+        5: "May", 6: "June", 7: "July", 8: "August",
+        9: "September", 10: "October", 11: "November", 12: "December"
     }
     return months.get(number, "number not valid")
-
-def previous_month(month):
-    locale.setlocale(locale.LC_TIME, 'it_IT.UTF-8')
-    today = datetime.strptime(f"01 {month} 2023", "%d %B %Y")
-    previous_date = today - timedelta(days=1)
-    return previous_date.strftime("%B")
 
 
 def get_cities():
@@ -33,10 +34,10 @@ def get_sorted_city_list():
 
 
 def get_coordinates_city(address):
-    geolocator = Nominatim(user_agent="myGeocoderApp")
-    location = geolocator.geocode(address, timeout=10)
-    if location:
-        return [location.latitude, location.longitude]
+    df = dataframe_from_cities_coordinates()
+    if address in df.index:
+        coords = df.loc[address]
+        return [coords['lat'], coords['lon']]
     else:
         return None
 

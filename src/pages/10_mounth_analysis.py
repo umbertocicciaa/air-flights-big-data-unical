@@ -5,7 +5,7 @@ from query.dashboard_analysis.avg_analysis_flights import calculate_monthly_flig
 from query.dashboard_analysis.fligth_delays_cause import causes_delay
 from query.dashboard_analysis.fligth_infos import monthly_flight_statistics
 from query.dashboard_analysis.range_delay import calculateFlightDelayRange
-from utils.utils import month_from_number, previous_month
+from utils.utils import number_from_month
 import plotly.graph_objects as go
 
 mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
@@ -53,7 +53,8 @@ if mese:
         d.metric("Average flight minutes", f"{lista_avg[3]} min", delta=0.0, delta_color="off", border=True)
 
     else:
-        df_mese_precedente = build_month_dataframe(month_from_number(previous_month(mese)))
+        mese_precedente = 12 if mese_numero == 1 else mese_numero - 1
+        df_mese_precedente = build_month_dataframe(mese_precedente)
         lista_avg_precedente = calculate_monthly_flight_statistics(df_mese_precedente)
         pernumvoli = round((((lista_avg[0] - lista_avg_precedente[0]) / lista_avg_precedente[0]) * 100), 2)
         perritardomedio = round((((lista_avg[1] - lista_avg_precedente[1]) / lista_avg_precedente[1]) * 100), 2)
