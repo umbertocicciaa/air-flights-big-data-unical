@@ -215,7 +215,7 @@ ricerca = False
 if origine is not None and dest is not None:
     ricerca = st.sidebar.button("FIND")
 
-if ricerca:
+if ricerca and origine is not None and dest is not None:
     st.markdown(f"### :blue[Flight Path: {origine} ➡️ {dest}]")
     build_map(origine,dest)
     st.markdown("# :blue[Flight information]")

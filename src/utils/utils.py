@@ -1,8 +1,6 @@
-import locale
 import os
 import airportsdata
 import pandas as pd
-from datetime import datetime, timedelta
 
 
 def number_from_month(month):

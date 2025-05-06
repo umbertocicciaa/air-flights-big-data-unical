@@ -1,3 +1,4 @@
+from narwhals import lit
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col
 from utils.data_visualization import create_month_dataframe, create_all_dataframe
@@ -12,7 +13,8 @@ from query.route.find_flight import get_flight
 from query.annual_stats.airport_traffic import most_traffic_city
 from query.annual_stats.month_week_fligth import get_weekly_flight_counts
 from utils.session_spark import create_session
-from etl.preprocesing import preprocess_data
+from pyspark.sql.functions import to_timestamp, lpad, col
+from datetime import datetime
 
 spark_session = create_session()
 
@@ -49,9 +51,19 @@ def query_destinazione_numvoli_citta(aeroporto : str):
 def query_citta_numvoli_aeroporto(citta : str):
     return city_flight_airport(build_all_dataframe(), citta)
 
+def convert_Time(df: DataFrame) -> DataFrame:
+    df = df.withColumn("CRSDepTime", to_timestamp(lpad(col("CRSDepTime").cast("string"), 4, "0"), "HHmm"))
+    df = df.withColumn("DepTime", to_timestamp(lpad(col("DepTime").cast("string"), 4, "0"), "HHmm"))
+    df = df.withColumn("CRSArrTime", to_timestamp(lpad(col("CRSArrTime").cast("string"), 4, "0"), "HHmm"))
+    df = df.withColumn("ArrTime", to_timestamp(lpad(col("ArrTime").cast("string"), 4, "0"), "HHmm"))
+    return df
 
-def query_get_volo(data, origine:str, destinazione : str, ora):
-    return get_flight(preprocess_data(build_all_dataframe()), data, origine, destinazione, ora)
+def query_get_volo(data, origine: str, destinazione: str, ora):
+    dati = convert_Time(build_all_dataframe())
+    datacorretta = data.strftime("%Y-%m-%d")
+    orario = ora.strftime("%H:%M")
+    print(f"Data: {datacorretta}, Origine: {origine}, Destinazione: {destinazione}, Ora: {orario}")
+    return get_flight(dati,datacorretta,origine,destinazione,orario)
 
 
 def query_mesi_stato_voli():
