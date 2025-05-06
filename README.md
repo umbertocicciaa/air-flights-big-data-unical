@@ -1,3 +1,5 @@
+[![Airflights](https://github.com/umbertocicciaa/air-flights-big-data-unical/actions/workflows/airflights.yml/badge.svg)](https://github.com/umbertocicciaa/air-flights-big-data-unical/actions/workflows/airflights.yml)
+
 # Air flights big data unical
 
 ## Project Overview
