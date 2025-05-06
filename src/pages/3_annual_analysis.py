@@ -1,8 +1,8 @@
 import pandas as pd
-import streamlit as st
 import plotly.express as px
-from query.query import query_mesi_stato_voli, query_mesi_voli_settimana, query_citta_num_voli
 import plotly.graph_objs as go
+import streamlit as st
+from query.query import query_mesi_stato_voli, query_mesi_voli_settimana, query_citta_num_voli
 
 mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
         'november', 'december']

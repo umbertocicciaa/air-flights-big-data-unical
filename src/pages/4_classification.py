@@ -1,10 +1,10 @@
-import streamlit as st
-
-from query.ml.randomforest import train_random_forest_model
-from query.ml.aux import evaluate_model_performance
-from query.query import preprocessing_for_classification
 from decimal import Decimal, ROUND_UP
+
 import plotly.express as px
+import streamlit as st
+from query.ml.aux import evaluate_model_performance
+from query.ml.randomforest import train_random_forest_model
+from query.query import preprocessing_for_classification
 
 
 def plot_confusion_matrix(cm):

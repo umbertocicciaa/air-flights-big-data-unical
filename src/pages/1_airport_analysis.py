@@ -1,11 +1,13 @@
-import streamlit as st
 import plotly.express as px
-
+import streamlit as st
+from query.query import query_numero_partenze_e_arrivi_citta, query_ritardo_medio_partenza_arrivo_citta, \
+    query_destinazione_numvoli_citta, query_citta_numvoli_aeroporto
+from services.airport_analysis_service import create_dataframe_pandas_to_visualize_delays, \
+    create_dataframe_pandas_to_visualize_city_coordinates, \
+    create_dataframe_pandas_to_visualize_map_airports_coordinates, \
+    create_dataframe_pandas_to_visualize_nmaxdestfrequenti, \
+    create_dataframe_pandas_to_visualize_aeroportiCitta_num_voliPartenzeArrivi
 from utils.utils import get_sorted_city_list
-from query.query import query_numero_partenze_e_arrivi_citta, query_ritardo_medio_partenza_arrivo_citta, query_destinazione_numvoli_citta, query_citta_numvoli_aeroporto
-
-from services.airport_analysis_service import create_dataframe_pandas_to_visualize_delays, create_dataframe_pandas_to_visualize_city_coordinates, create_dataframe_pandas_to_visualize_map_airports_coordinates, create_dataframe_pandas_to_visualize_nmaxdestfrequenti, create_dataframe_pandas_to_visualize_aeroportiCitta_num_voliPartenzeArrivi
-
 
 st.set_page_config(page_title="Airport statistics", layout="wide")
 st.title(":blue[Airport statistics]")

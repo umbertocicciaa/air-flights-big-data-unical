@@ -1,10 +1,9 @@
 import os
 
-import pandas as pd
-import streamlit as st
-import seaborn as sns
 import matplotlib.pyplot as plt
-from utils.datasets import read_parquet
+import pandas as pd
+import seaborn as sns
+import streamlit as st
 
 # hdfs_input_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/")
 

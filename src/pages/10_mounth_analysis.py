@@ -1,12 +1,11 @@
 import pandas as pd
+import plotly.graph_objects as go
 import streamlit as st
-from query.query import build_month_dataframe
 from query.dashboard_analysis.avg_analysis_flights import calculate_monthly_flight_statistics
 from query.dashboard_analysis.fligth_delays_cause import causes_delay
 from query.dashboard_analysis.fligth_infos import monthly_flight_statistics
 from query.dashboard_analysis.range_delay import calculateFlightDelayRange
-from utils.utils import number_from_month
-import plotly.graph_objects as go
+from query.query import build_month_dataframe
 
 mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october',
         'november', 'december']

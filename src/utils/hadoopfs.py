@@ -1,6 +1,7 @@
-from hdfs import InsecureClient 
-from logs.logger import logger
 import os
+
+from hdfs import InsecureClient
+from logs.logger import logger
 
 
 def upload_to_hdfs(local_path, hdfs_path):

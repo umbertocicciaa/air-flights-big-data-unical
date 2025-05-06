@@ -1,20 +1,17 @@
-from narwhals import lit
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import col
-from utils.data_visualization import create_month_dataframe, create_all_dataframe
-from query.ml.clustering import clustering_flights_on_time_delayed
-from query.ml.aux import build_train_dataframe
+from pyspark.sql.functions import to_timestamp, lpad, col
 from query.airports_analysis.city_fligth_airport import city_flight_airport
-from query.airports_analysis.max_frequent_airport_dest import destinations_number_city
 from query.airports_analysis.fligth_numbers import calculate_departure_arrival_counts
 from query.airports_analysis.flitgh_delays import average_month_delay_for_city
-from query.dashboard_analysis.fligth_infos import monthly_flight_statistics
-from query.route.find_flight import get_flight
+from query.airports_analysis.max_frequent_airport_dest import destinations_number_city
 from query.annual_stats.airport_traffic import most_traffic_city
 from query.annual_stats.month_week_fligth import get_weekly_flight_counts
+from query.dashboard_analysis.fligth_infos import monthly_flight_statistics
+from query.ml.aux import build_train_dataframe
+from query.ml.clustering import clustering_flights_on_time_delayed
+from query.route.find_flight import get_flight
+from utils.data_visualization import create_month_dataframe, create_all_dataframe
 from utils.session_spark import create_session
-from pyspark.sql.functions import to_timestamp, lpad, col
-from datetime import datetime
 
 spark_session = create_session()
 
@@ -51,19 +48,9 @@ def query_destinazione_numvoli_citta(aeroporto : str):
 def query_citta_numvoli_aeroporto(citta : str):
     return city_flight_airport(build_all_dataframe(), citta)
 
-def convert_Time(df: DataFrame) -> DataFrame:
-    df = df.withColumn("CRSDepTime", to_timestamp(lpad(col("CRSDepTime").cast("string"), 4, "0"), "HHmm"))
-    df = df.withColumn("DepTime", to_timestamp(lpad(col("DepTime").cast("string"), 4, "0"), "HHmm"))
-    df = df.withColumn("CRSArrTime", to_timestamp(lpad(col("CRSArrTime").cast("string"), 4, "0"), "HHmm"))
-    df = df.withColumn("ArrTime", to_timestamp(lpad(col("ArrTime").cast("string"), 4, "0"), "HHmm"))
-    return df
 
-def query_get_volo(data, origine: str, destinazione: str, ora):
-    dati = convert_Time(build_all_dataframe())
-    datacorretta = data.strftime("%Y-%m-%d")
-    orario = ora.strftime("%H:%M")
-    print(f"Data: {datacorretta}, Origine: {origine}, Destinazione: {destinazione}, Ora: {orario}")
-    return get_flight(dati,datacorretta,origine,destinazione,orario)
+def query_get_volo(data, origine, destinazione, ora):
+    return get_flight(build_all_dataframe(),data,origine,destinazione,ora)
 
 
 def query_mesi_stato_voli():

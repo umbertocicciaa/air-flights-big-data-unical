@@ -1,20 +1,24 @@
-import datetime
+from datetime import datetime, date, time
+
+import airportsdata
 import pandas as pd
+import pydeck as pdk
 import streamlit as st
 from geopy.distance import geodesic
-from pyspark import Row
 from pyspark.sql import DataFrame
-import pydeck as pdk
-import airportsdata
+from pyspark.sql.types import Row
 from query.query import query_get_volo
-
 from query.route.find_flight import get_flight_advanced_delay, get_flight_advanced_canc, get_flight_advanced_div
 from utils.utils import get_coordinates_city, get_sorted_city_list
 
 
-def build_map(origin: str, destinazione: str):
-    origin = get_coordinates_city(origin)
+def build_map(origin_par: str, destinazione: str):
+    origin = get_coordinates_city(origin_par)
     destination = get_coordinates_city(destinazione)
+
+    if origin is None or destination is None:
+        st.error("Error: Unable to find coordinates for the specified cities.")
+        return
 
     distance_km = geodesic(origin, destination).kilometers
 
@@ -68,25 +72,28 @@ def build_map(origin: str, destinazione: str):
 
     st.pydeck_chart(pdk.Deck(layers=layers, initial_view_state=view_state))
 
+
 aereoporti = airports = airportsdata.load('IATA')
 
+
 def make_delay_plot(row: Row):
-    val = (row["CarrierDelay"], row["WeatherDelay"],row["NASDelay"], row["SecurityDelay"],row["LateAircraftDelay"])
+    val = (row["CarrierDelay"], row["WeatherDelay"], row["NASDelay"], row["SecurityDelay"], row["LateAircraftDelay"])
     if all(v is not None for v in val):
         data = pd.DataFrame({
             "Type of delay": ["CarrierDelay", "WeatherDelay", "NASDelay", "SecurityDelay", "LateAircraftDelay"],
-            "Minutes": val })
+            "Minutes": val})
         st.markdown("#### :blue[Causes of the delay]")
         st.bar_chart(data.set_index("Type of delay")["Minutes"])
 
 
 def visualizza_dir(row: Row):
-    for i in range(1,6):
+    for i in range(1, 6):
         if row[f"Div{i}Airport"] is not None:
             aereoporto = aereoporti[row[f"Div{i}Airport"]]["name"]
-            st.metric("Airport hijacking", aereoporto , border=True)
+            st.metric("Airport hijacking", aereoporto, border=True)
     if row["DivReachedDest"] == 1.0:
         st.markdown("### :blue[THE PLANE HAS REACHED ITS FINAL DESTINATION]")
+
 
 def visualizzazione_singola(row: Row):
     if row["Cancelled"] == 1:
@@ -100,7 +107,7 @@ def visualizzazione_singola(row: Row):
     with col1:
         st.metric("Departure airport", aereoportoOr, border=True)
     with col2:
-        st.metric("Destination airport", aereoportoDest , border=True)
+        st.metric("Destination airport", aereoportoDest, border=True)
 
     st.markdown("### :blue[Flight Code]")
     st.metric("Flight Code", row["Flight_Number_Reporting_Airline"], border=True)
@@ -119,13 +126,17 @@ def visualizzazione_singola(row: Row):
     st.markdown("### :blue[Hourly information]")
     col6, col7, col8, col9 = st.columns(4)
     with col6:
-        st.metric("Scheduled departure time", row["CRSDepTime"].strftime("%H:%M"), delta=0, delta_color="off", border=True)
+        st.metric("Scheduled departure time", row["CRSDepTime"].strftime("%H:%M"), delta=0, delta_color="off",
+                  border=True)
     with col7:
-        st.metric("Actual departure time", row["DepTime"].strftime("%H:%M"), delta = row["DepDelay"],delta_color="inverse", border=True)
+        st.metric("Actual departure time", row["DepTime"].strftime("%H:%M"), delta=row["DepDelay"],
+                  delta_color="inverse", border=True)
     with col8:
-        st.metric("Scheduled arrival time", row["CRSArrTime"].strftime("%H:%M"),delta=0, delta_color="off",border=True)
+        st.metric("Scheduled arrival time", row["CRSArrTime"].strftime("%H:%M"), delta=0, delta_color="off",
+                  border=True)
     with col9:
-        st.metric("Actual arrival time", row["ArrTime"].strftime("%H:%M"), delta = row["ArrDelay"],delta_color="inverse", border=True)
+        st.metric("Actual arrival time", row["ArrTime"].strftime("%H:%M"), delta=row["ArrDelay"], delta_color="inverse",
+                  border=True)
 
     st.markdown("### :blue[Delay information]")
     col8, col9 = st.columns(2)
@@ -142,26 +153,26 @@ def visualizzazione_singola(row: Row):
     else:
         st.markdown("#### :red[Information not available]")
 
+
 def visualizza_informazioni(df: DataFrame):
     numVoli = df.count()
     if numVoli == 0:
         st.write("# :red[There is no flight for the information entered]")
         return
-    try:
-        volo = df.first()
+    volo = df.first()
+    if volo is not None:
         visualizzazione_singola(volo)
-    except Exception as e:
-        print(e)
-        st.markdown("# :red[ERROR: Unable to display data]")
-
+    else:
+        st.markdown("# :red[ERROR: No flight data available]")
 
 
 def create_select_button(city: list):
-    origine = st.sidebar.selectbox("Choose origin", city, index= None)
-    dest = st.sidebar.selectbox("Choose destination", city , index= None)
-    data = st.sidebar.date_input("Enter departure date", datetime.date(2013,1,1))
-    orario = st.sidebar.time_input("Departure time", datetime.time(0, 0))
+    origine = st.sidebar.selectbox("Choose origin", city, index=None)
+    dest = st.sidebar.selectbox("Choose destination", city, index=None)
+    data = st.sidebar.date_input("Enter departure date", date(2013, 1, 1))
+    orario = st.sidebar.time_input("Departure time", time(0, 0))
     return origine, dest, data, orario
+
 
 def create_optinal_choose():
     opt = st.sidebar.expander("Advanced search")
@@ -169,7 +180,8 @@ def create_optinal_choose():
         senza_ritardo = st.checkbox("Exclude flights with delays")
         senza_cancellazioni = st.checkbox("Exclude cancelled flights")
         senza_dirottamenti = st.checkbox("Exclude hijacked flights")
-    return senza_ritardo,senza_cancellazioni, senza_dirottamenti
+    return senza_ritardo, senza_cancellazioni, senza_dirottamenti
+
 
 st.set_page_config(page_title="Research", layout="wide")
 st.title(":blue[FLIGTH FINDER]")
@@ -200,7 +212,7 @@ with st.expander("more information"):
     - If the flight is diverted, displays the alternative airports to which it has been destined.
     - If the flight has been cancelled, an error message is displayed.
     """)
-    
+
 st.write("""---""")
 
 st.sidebar.title(":blue[START HERE]")
@@ -210,21 +222,21 @@ city = get_sorted_city_list()
 origine, dest, data, orario = create_select_button(city)
 
 senza_ritardo, senza_cancellazioni, senza_dirottamenti = create_optinal_choose()
-print(senza_ritardo,senza_cancellazioni,senza_dirottamenti)
+print(senza_ritardo, senza_cancellazioni, senza_dirottamenti)
 ricerca = False
 if origine is not None and dest is not None:
     ricerca = st.sidebar.button("FIND")
 
 if ricerca and origine is not None and dest is not None:
     st.markdown(f"### :blue[Flight Path: {origine} ➡️ {dest}]")
-    build_map(origine,dest)
+    build_map(origine, dest)
     st.markdown("# :blue[Flight information]")
     voli = query_get_volo(data, origine, dest, orario)
     voli.show()
     if senza_ritardo:
-         voli = get_flight_advanced_delay(voli)
+        voli = get_flight_advanced_delay(voli)
     if senza_cancellazioni:
-         voli = get_flight_advanced_canc(voli)
+        voli = get_flight_advanced_canc(voli)
     if senza_dirottamenti:
-         voli = get_flight_advanced_div(voli)
+        voli = get_flight_advanced_div(voli)
     visualizza_informazioni(voli)

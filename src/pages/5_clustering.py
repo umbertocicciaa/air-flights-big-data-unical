@@ -1,5 +1,5 @@
-import streamlit as st
 import plotly.express as px
+import streamlit as st
 from query.query import build_month_dataframe, clustering_flights, preprocessing_clustering
 from utils.utils import number_from_month
 
