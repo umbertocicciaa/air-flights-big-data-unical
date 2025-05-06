@@ -43,12 +43,12 @@ with st.expander("maggiori informazioni"):
     This combination of charts provides a clear and detailed visualization of air traffic information, useful for analyzing and comparing flight data in a dynamic and interactive way.
     """)
 
-# PARTE 1
+
 num_voli_stato_volo = query_mesi_stato_voli()
 df = create_dataframe_pandas_to_visualize_bargraph_status_numvoli(num_voli_stato_volo)
 list_df_columns = list(df.columns)
 
-# grafico a barre
+
 fig1 = px.bar(df,
               x=list_df_columns[0],
               y=list_df_columns[1:],
@@ -64,7 +64,7 @@ fig1.update_layout(
 st.markdown("### :blue[Flight Status Bar Graph]")
 st.plotly_chart(fig1)
 
-# PARTE 2
+
 data_mese_numvolisettimana = query_mesi_voli_settimana()
 
 fig2 = px.imshow(data_mese_numvolisettimana,
@@ -84,7 +84,7 @@ fig2.update_layout(
 st.markdown("""### :blue[Weekly heat map]""")
 st.plotly_chart(fig2)
 
-# PARTE 3
+
 df = query_citta_num_voli()
 df['text'] = df['city'] + ' traffic: ' + df['num'].astype(str)
 fig3 = go.Figure(data=go.Scattergeo(

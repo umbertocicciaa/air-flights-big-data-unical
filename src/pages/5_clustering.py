@@ -35,7 +35,7 @@ st.write(":blue[This page shows the K-means clustering visualization for differe
 mese = st.sidebar.selectbox('Select month', mesi, index=None)
 
 if mese:
-    mese_number = number_from_month(mese)
+    mese_number = int(number_from_month(mese))
     df = build_month_dataframe(mese_number)
     df_subsets = df.sample(fraction=0.25)
     df_clustering = preprocessing_clustering(df_subsets)

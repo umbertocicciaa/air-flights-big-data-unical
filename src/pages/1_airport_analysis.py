@@ -1,59 +1,10 @@
-import pandas as pd
 import streamlit as st
 import plotly.express as px
 
-from utils.utils import get_city_coordinate, get_airport_coordinates, get_sorted_city_list
+from utils.utils import get_sorted_city_list
 from query.query import query_numero_partenze_e_arrivi_citta, query_ritardo_medio_partenza_arrivo_citta, query_destinazione_numvoli_citta, query_citta_numvoli_aeroporto
 
-
-def create_dataframe_pandas_to_visualize_delays(delay_list):
-    df = pd.DataFrame({'ritardi partenze': delay_list[0], 'ritardi arrivi': delay_list[1]})
-    df.index = range(1, 13)
-    return df
-
-
-def create_dataframe_pandas_to_visualize_city_coordinates(lista_citta):
-    cities = []
-    latitudine = []
-    longitudine = []
-    dict_citta_coordinate = get_city_coordinate()
-    for citta in lista_citta:
-        if citta in dict_citta_coordinate:
-            coordinates = dict_citta_coordinate[citta]
-            cities.append(citta)
-            latitudine.append(coordinates[0])
-            longitudine.append(coordinates[1])
-    return pd.DataFrame({"name": cities, 'lat': latitudine, 'lon': longitudine})
-
-
-def create_dataframe_pandas_to_visualize_map_airports_coordinates(aeroporti):
-    airport_name = []
-    airport_lat = []
-    airport_lon = []
-
-    for aeroporto in aeroporti:
-        airport_info = get_airport_coordinates(aeroporto)
-        if airport_info:
-            airport_name.append(airport_info["name"])
-            airport_lat.append(airport_info["lat"])
-            airport_lon.append(airport_info["lon"])
-    return pd.DataFrame({'name': airport_name, 'lat': airport_lat, 'lon': airport_lon})
-
-
-def create_dataframe_pandas_to_visualize_nmaxdestfrequenti(dest_numvoli, nummaxfrequenti=5):
-    dict_ord = sorted(dest_numvoli.items(), key=lambda x: x[1], reverse=True)[:nummaxfrequenti]
-    citta = [x for (x, y) in dict_ord]
-    valore = [y for (x, y) in dict_ord]
-
-    df_5max = pd.DataFrame({"Destinazione": citta, "Numvoli": valore})
-    df_5max.set_index("Destinazione", inplace=True)
-    return df_5max
-
-
-def create_dataframe_pandas_to_visualize_aeroportiCitta_num_voliPartenzeArrivi(aeroporti_numvoli):
-    df_pandas = pd.DataFrame.from_dict(aeroporti_numvoli, orient='index',
-                                       columns=['Numero partenze', 'Numero arrivi'])
-    return df_pandas
+from services.airport_analysis_service import create_dataframe_pandas_to_visualize_delays, create_dataframe_pandas_to_visualize_city_coordinates, create_dataframe_pandas_to_visualize_map_airports_coordinates, create_dataframe_pandas_to_visualize_nmaxdestfrequenti, create_dataframe_pandas_to_visualize_aeroportiCitta_num_voliPartenzeArrivi
 
 
 st.set_page_config(page_title="Airport statistics", layout="wide")
@@ -89,6 +40,7 @@ if (citta and nmaxfreq):
 
 if visualizza:
     a, b = st.columns(2)
+    citta = str(citta)
     numvoli_partenza, numvoli_arrivo = query_numero_partenze_e_arrivi_citta(citta)
 
     a.metric("Number of departures", numvoli_partenza, border=True)
@@ -125,6 +77,10 @@ if visualizza:
         st.plotly_chart(fig, use_container_width=True)
 
     dest_numvoli = query_destinazione_numvoli_citta(citta)
+    if nmaxfreq is not None:
+        nmaxfreq = int(nmaxfreq)
+    else:
+        nmaxfreq = 0
     chart_destmaxfreq_data = create_dataframe_pandas_to_visualize_nmaxdestfrequenti(dest_numvoli, nmaxfreq)
     st.markdown("### :blue[Most Popular Destinations]")
     st.bar_chart(chart_destmaxfreq_data, horizontal=True)
