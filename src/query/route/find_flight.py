@@ -4,7 +4,6 @@ from pyspark.sql import DataFrame
 
 
 def get_flight(df: DataFrame, data: datetime.date, origine: str, destinazione: str, ora: datetime.time) -> DataFrame:
-    print(df.head(1))
     ora_str = ora.strftime("%H%M")
     print(data, ora_str)
     voliFiltrati = df.filter(df["FlightDate"] == data) \

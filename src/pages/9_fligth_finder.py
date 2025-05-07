@@ -125,17 +125,23 @@ def visualizzazione_singola(row: Row):
 
     st.markdown("### :blue[Hourly information]")
     col6, col7, col8, col9 = st.columns(4)
+    
+    crsdeeptime = f"{row['CRSDepTime'] // 100:02}:{row['CRSDepTime'] % 100:02}"
+    crsarrtime = f"{row['CRSArrTime'] // 100:02}:{row['CRSArrTime'] % 100:02}"
+    deeptime = f"{row['DepTime'] // 100:02}:{row['DepTime'] % 100:02}"
+    arrtime = f"{row['ArrTime'] // 100:02}:{row['ArrTime'] % 100:02}"
+    
     with col6:
-        st.metric("Scheduled departure time", row["CRSDepTime"].strftime("%H:%M"), delta=0, delta_color="off",
+        st.metric("Scheduled departure time", crsdeeptime, delta=0, delta_color="off",
                   border=True)
     with col7:
-        st.metric("Actual departure time", row["DepTime"].strftime("%H:%M"), delta=row["DepDelay"],
+        st.metric("Actual departure time", deeptime, delta=row["DepDelay"],
                   delta_color="inverse", border=True)
     with col8:
-        st.metric("Scheduled arrival time", row["CRSArrTime"].strftime("%H:%M"), delta=0, delta_color="off",
+        st.metric("Scheduled arrival time", crsarrtime, delta=0, delta_color="off",
                   border=True)
     with col9:
-        st.metric("Actual arrival time", row["ArrTime"].strftime("%H:%M"), delta=row["ArrDelay"], delta_color="inverse",
+        st.metric("Actual arrival time", arrtime, delta=row["ArrDelay"], delta_color="inverse",
                   border=True)
 
     st.markdown("### :blue[Delay information]")
@@ -232,7 +238,6 @@ if ricerca and origine is not None and dest is not None:
     build_map(origine, dest)
     st.markdown("# :blue[Flight information]")
     voli = query_get_volo(data, origine, dest, orario)
-    voli.show()
     if senza_ritardo:
         voli = get_flight_advanced_delay(voli)
     if senza_cancellazioni:

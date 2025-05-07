@@ -6,4 +6,5 @@ shared-filesystem
 .vscode
 .idea
 __pycache__
+.run
 backlog.txt
