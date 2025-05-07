@@ -28,10 +28,9 @@ cd air-flights-big-data-unical
 To run the project locally:
 
 ```sh
-set -a
-source src/$ENV.env
-set +a
-python3 src/run.py
+# change java home in src/local.env with jdk8 or jdk11
+chmod u+x run.sh
+./run.sh
 ```
 
 ## Usage with docker compose
