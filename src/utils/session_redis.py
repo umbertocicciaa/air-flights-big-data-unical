@@ -1,5 +1,3 @@
-
-
 import os
 import redis
 import json
@@ -12,8 +10,8 @@ r = redis.Redis(host=redis_host, port=6379, db=redis_db)
 def get_client():
     return r
 
-async def get_from_cache(key):
-    value = await r.get(key)
+def get_from_cache(key):
+    value = r.get(key)
     if value is not None:
         return json.loads(value)
     return None

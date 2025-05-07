@@ -1,6 +1,8 @@
+from operator import ge
 import plotly.express as px
 import streamlit as st
 from query.query import build_month_dataframe, clustering_flights, preprocessing_clustering
+from utils.session_redis import get_from_cache
 from utils.utils import number_from_month
 
 
@@ -32,7 +34,10 @@ st.set_page_config(page_title="Clustering", layout="wide")
 st.title(":blue[K-means Clustering Visualization]")
 st.write(":blue[This page shows the K-means clustering visualization for different configurations of 'k'.]")
 
-mese = st.sidebar.selectbox('Select month', mesi, index=None)
+mese = get_from_cache("select_month_clustering")
+if mese is None:
+    mese = st.sidebar.selectbox('Select month', mesi, index=None)
+    st.session_state["select_month_clustering"] = mese
 
 if mese:
     mese_number = int(number_from_month(mese))

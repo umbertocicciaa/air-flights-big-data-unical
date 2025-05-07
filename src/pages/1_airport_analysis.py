@@ -8,6 +8,7 @@ from services.airport_analysis_service import create_dataframe_pandas_to_visuali
     create_dataframe_pandas_to_visualize_nmaxdestfrequenti, \
     create_dataframe_pandas_to_visualize_aeroportiCitta_num_voliPartenzeArrivi
 from utils.utils import get_sorted_city_list
+from utils.session_redis import get_client, get_from_cache, save_to_cache
 
 st.set_page_config(page_title="Airport statistics", layout="wide")
 st.title(":blue[Airport statistics]")
@@ -31,10 +32,20 @@ with st.expander("More information"):
 
 lista_ordinata_citta = get_sorted_city_list()
 
-citta = st.sidebar.selectbox('Select a city', lista_ordinata_citta, index=None)
 
-nmaxfreq = st.sidebar.select_slider("Select the number of most frequent destinations to display",
-                                    options=[None] + [i for i in range(1, 11)])
+redis_client = get_client()
+citta = get_from_cache('select_city')
+nmaxfreq = get_from_cache('select_nmaxfreq')
+
+if  citta is None:
+    citta = st.sidebar.selectbox('Select a city', lista_ordinata_citta, index=None)
+    save_to_cache('select_city', citta, 3600)
+    
+if nmaxfreq is None:
+    nmaxfreq = st.sidebar.select_slider("Select the number of most frequent destinations to display",
+                                        options=[None] + [i for i in range(1, 11)])
+    save_to_cache('select_nmaxfreq', nmaxfreq, 3600)
+
 
 visualizza = False
 if (citta and nmaxfreq):

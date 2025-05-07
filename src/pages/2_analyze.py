@@ -1,7 +1,8 @@
+from requests import get
 import streamlit as st
 from pyspark.sql.functions import col, count
 from utils.datasets import read_parquet
-
+from utils.session_redis import get_from_cache, save_to_cache
 
 #hdfs_input_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000/")
 
@@ -11,8 +12,17 @@ def analyze_data(dataframe):
         st.write(dataframe.describe())
 
     st.sidebar.header("Filter Options")
-    column_to_filter = st.sidebar.selectbox("Select Column to Filter", dataframe.columns)
-    filter_value = st.sidebar.text_input("Enter Value to Filter")
+    
+    column_to_filter = get_from_cache('select_column_to_filter')
+    filter_value     = get_from_cache('select_filter_value')
+    
+    if column_to_filter is None:
+        column_to_filter = st.sidebar.selectbox("Select Column to Filter", dataframe.columns)
+        save_to_cache('select_column_to_filter', column_to_filter, 3600)
+    
+    if filter_value is None:
+        filter_value = st.sidebar.text_input("Enter Value to Filter")
+        save_to_cache('select_filter_value', filter_value, 3600)
 
     if filter_value:
         filtered_data = dataframe.filter(dataframe[column_to_filter].cast("string") == filter_value)
