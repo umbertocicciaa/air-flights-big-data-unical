@@ -1,4 +1,4 @@
-from datetime import datetime, date, time
+from datetime import date, time
 
 import airportsdata
 import pandas as pd
