@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.13-slim
 COPY --from=openjdk:8-jre-slim /usr/local/openjdk-8 /usr/local/openjdk-8
 
 ENV JAVA_HOME=/usr/local/openjdk-8
