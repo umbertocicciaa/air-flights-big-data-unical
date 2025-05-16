@@ -34,7 +34,7 @@ st.markdown(
     """)
 
 df = preprocessing_for_classification()
-avvia_training = st.sidebar.button("Train Model")
+avvia_training = st.button("Train Model")
 
 if avvia_training:
     with st.spinner("Training in progress... This may take 5 minutes."):

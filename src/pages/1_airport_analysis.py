@@ -1,3 +1,4 @@
+from operator import index
 import plotly.express as px
 import streamlit as st
 from query.query import query_numero_partenze_e_arrivi_citta, query_ritardo_medio_partenza_arrivo_citta, \
@@ -34,22 +35,34 @@ lista_ordinata_citta = get_sorted_city_list()
 
 
 redis_client = get_client()
+
 citta = get_from_cache('select_city')
 nmaxfreq = get_from_cache('select_nmaxfreq')
 
-if  citta is None:
-    citta = st.sidebar.selectbox('Select a city', lista_ordinata_citta, index=None)
-    save_to_cache('select_city', citta, 3600)
+if citta is not None:
+    citta = st.selectbox('Select a city', lista_ordinata_citta, index=lista_ordinata_citta.index(citta) if citta in lista_ordinata_citta else None)
+else:
+    citta = st.selectbox('Select a city', lista_ordinata_citta, index=None)
+save_to_cache('select_city', citta, 3600)
     
-if nmaxfreq is None:
-    nmaxfreq = st.sidebar.select_slider("Select the number of most frequent destinations to display",
-                                        options=[None] + [i for i in range(1, 11)])
-    save_to_cache('select_nmaxfreq', nmaxfreq, 3600)
+options_nmaxfreq = [None] + [i for i in range(1, 11)]
+if nmaxfreq is not None:
+    nmaxfreq = st.select_slider(
+        "Select the number of most frequent destinations to display",
+        options=options_nmaxfreq,
+        value=options_nmaxfreq.index(nmaxfreq)
+    )
+else:
+    nmaxfreq = st.select_slider(
+        "Select the number of most frequent destinations to display",
+        options=options_nmaxfreq
+    )
+save_to_cache('select_nmaxfreq', nmaxfreq, 3600)
 
 
 visualizza = False
 if (citta and nmaxfreq):
-    visualizza = st.sidebar.button("Calculate")
+    visualizza = st.button("Calculate")
 
 if visualizza:
     a, b = st.columns(2)

@@ -2,7 +2,7 @@ from operator import ge
 import plotly.express as px
 import streamlit as st
 from query.query import build_month_dataframe, clustering_flights, preprocessing_clustering
-from utils.session_redis import get_from_cache
+from utils.session_redis import get_from_cache, save_to_cache
 from utils.utils import number_from_month
 
 
@@ -36,9 +36,11 @@ st.write(":blue[This page shows the K-means clustering visualization for differe
 
 mese = get_from_cache("select_month_clustering")
 if mese is None:
-    mese = st.sidebar.selectbox('Select month', mesi, index=None)
+    mese = st.selectbox('Select month', mesi, index=None)
     st.session_state["select_month_clustering"] = mese
-
+else:
+    mese = st.selectbox('Select month', mesi, index=mesi.index(mese))
+save_to_cache("select_month_clustering", mese, 3600)
 if mese:
     mese_number = int(number_from_month(mese))
     df = build_month_dataframe(mese_number)

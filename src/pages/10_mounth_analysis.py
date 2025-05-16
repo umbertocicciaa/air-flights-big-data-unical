@@ -11,7 +11,7 @@ mesi = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august'
         'november', 'december']
 
 st.set_page_config(page_title="Monthly statistics", layout="wide")
-st.sidebar.header(":blue[Monthly statistics]")
+st.header(":blue[Monthly statistics]")
 
 st.title(":blue[Monthly statistics]")
 
@@ -35,7 +35,7 @@ with st.expander("more information"):
         Discover monthly trends and get a complete and detailed view of monthly air traffic!
     ''')
 
-mese = st.sidebar.selectbox('Select a month', mesi, index=None)
+mese = st.selectbox('Select a month', mesi, index=None)
 
 if mese:
     mese_numero = mesi.index(mese) + 1

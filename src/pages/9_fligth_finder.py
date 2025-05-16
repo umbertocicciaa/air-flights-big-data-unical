@@ -173,15 +173,15 @@ def visualizza_informazioni(df: DataFrame):
 
 
 def create_select_button(city: list):
-    origine = st.sidebar.selectbox("Choose origin", city, index=None)
-    dest = st.sidebar.selectbox("Choose destination", city, index=None)
-    data = st.sidebar.date_input("Enter departure date", date(2013, 1, 1))
-    orario = st.sidebar.time_input("Departure time", time(0, 0))
+    origine = st.selectbox("Choose origin", city, index=None)
+    dest = st.selectbox("Choose destination", city, index=None)
+    data = st.date_input("Enter departure date", date(2013, 1, 1))
+    orario = st.time_input("Departure time", time(0, 0))
     return origine, dest, data, orario
 
 
 def create_optinal_choose():
-    opt = st.sidebar.expander("Advanced search")
+    opt = st.expander("Advanced search")
     with opt:
         senza_ritardo = st.checkbox("Exclude flights with delays")
         senza_cancellazioni = st.checkbox("Exclude cancelled flights")
@@ -221,7 +221,7 @@ with st.expander("more information"):
 
 st.write("""---""")
 
-st.sidebar.title(":blue[START HERE]")
+st.title(":blue[START HERE]")
 
 city = get_sorted_city_list()
 
@@ -231,7 +231,7 @@ senza_ritardo, senza_cancellazioni, senza_dirottamenti = create_optinal_choose()
 print(senza_ritardo, senza_cancellazioni, senza_dirottamenti)
 ricerca = False
 if origine is not None and dest is not None:
-    ricerca = st.sidebar.button("FIND")
+    ricerca = st.button("FIND")
 
 if ricerca and origine is not None and dest is not None:
     st.markdown(f"### :blue[Flight Path: {origine} ➡️ {dest}]")
