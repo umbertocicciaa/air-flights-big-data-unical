@@ -6,6 +6,9 @@ from query.ml.aux import evaluate_model_performance
 from query.ml.randomforest import train_random_forest_model
 from query.query import preprocessing_for_classification
 
+from utils.session_redis import get_client
+
+redis_client = get_client()
 
 def plot_confusion_matrix(cm):
     figs = px.imshow(cm, text_auto=True, color_continuous_scale="Blues")
@@ -39,7 +42,6 @@ avvia_training = st.button("Train Model")
 if avvia_training:
     with st.spinner("Training in progress... This may take 5 minutes."):
         model = train_random_forest_model(df)
-
     st.success("Training completed successfully!")
 
     st.markdown("# :blue[Model Metrics]")

@@ -23,7 +23,6 @@ def build_month_dataframe(mese: int):
 def build_all_dataframe():
     return create_all_dataframe()
 
-
 def query_numero_partenze_e_arrivi_citta(citta : str):
     return calculate_departure_arrival_counts(build_all_dataframe(), citta)
 

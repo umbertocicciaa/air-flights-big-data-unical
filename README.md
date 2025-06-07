@@ -6,13 +6,22 @@
 
 This project is designed to analyze and visualize air flight data using big data technologies. It includes data processing, storage, and visualization components to provide insights into various aspects of air travel.
 
-## Prerequisites
+## Prerequisites for running with docker
 
 Before running the project, ensure you have the following installed:
 
-- Python 3.x
 - Docker
 - Docker Compose
+
+## Prerequisites for running in shell
+
+Before running the project, ensure you have the following installed:
+
+- Pytho 3.x
+- Redis
+- Spark
+- Hadoop
+- Java JDK
 
 ## Installation
 
@@ -35,7 +44,7 @@ chmod u+x run.sh
 
 ## Usage with docker compose
 
-To run the project locally, use Docker Compose:
+To run the project locally, using Docker Compose:
 
 ```sh
 docker compose up

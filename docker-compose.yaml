@@ -64,7 +64,9 @@ services:
             - hadoop
 
     app:
-        image: airflights:latest
+        build:
+            context: ./src/
+            dockerfile: Dockerfile
         container_name: app
         restart: always
         depends_on:
@@ -84,7 +86,6 @@ services:
     
     redis:
         image: redis:latest
-        container_name: redis
         restart: always
         ports:
             - 6379:6379

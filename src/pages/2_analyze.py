@@ -1,3 +1,4 @@
+import os
 from requests import get
 import streamlit as st
 from pyspark.sql.functions import col, count
@@ -44,6 +45,9 @@ def analyze_data(dataframe):
 
 st.title("Data Analysis")
 #path =f"{hdfs_input_path}outputs"
-path = "shared-filesystem/outputs"
+hdfs_path = os.getenv("HDFS_PATH", "hdfs://namenode:9000")
+hdfs_output_path = os.getenv("HDFS_OUTPUT_PATH", "/outputs")
+output_path = hdfs_path + hdfs_output_path.lstrip("/")
+path = output_path
 data = read_parquet(path)
 analyze_data(data)

@@ -1,8 +1,9 @@
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, avg
-
+from logs.logger import logger
 
 def average_month_delay_for_city(df: DataFrame):
+    logger.info(f"Colonne:\n{df.columns}")
     avg_delay = df.dropna(subset=['ArrDelayMinutes']) \
         .filter(col('ArrDelayMinutes') > 0) \
         .agg(avg("ArrDelayMinutes")).collect()[0][0]

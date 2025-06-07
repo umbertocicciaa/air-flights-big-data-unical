@@ -2,7 +2,7 @@ import os
 import redis
 import json
 
-redis_host = os.getenv('REDIS_HOST', 'localhost')
+redis_host = os.getenv('REDIS_HOST', 'redis')
 redis_db: int = int(os.getenv('REDIS_DB', 0))
 
 r = redis.Redis(host=redis_host, port=6379, db=redis_db)

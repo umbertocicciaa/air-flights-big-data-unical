@@ -3,6 +3,10 @@ from pyspark.ml.classification import RandomForestClassifier
 from pyspark.ml.feature import StringIndexer, VectorAssembler
 from pyspark.sql import DataFrame
 
+from utils.session_redis import get_client
+import pickle
+
+redis_client = get_client()
 
 def train_random_forest_model(df: DataFrame):
     categorical_columns = ["OriginStateName", "DestStateName"]
@@ -32,6 +36,9 @@ def train_random_forest_model(df: DataFrame):
     pipeline = Pipeline(stages=[assembler, rf])
 
     model = pipeline.fit(train_df)
+
+    model_bytes = pickle.dumps(model)
+    redis_client.set("random_forest_model", model_bytes)
 
     result_df = model.transform(test_df)
 
