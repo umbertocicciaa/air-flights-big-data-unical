@@ -27,7 +27,6 @@ spec:
             - configMapRef:
                 name: src-dev-env
           image: ghcr.io/umbertocicciaa/airflights:latest
-          ImagePullPolicy: Always
           name: app
           ports:
             - containerPort: 8501

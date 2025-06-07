@@ -1,7 +1,6 @@
 datasets
 outputs
 .venv
-spark*
 shared-filesystem
 .vscode
 .idea
