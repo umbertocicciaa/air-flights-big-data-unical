@@ -1,0 +1,18 @@
+apiVersion: v1
+data:
+  ENV: ./dev.env
+  HDFS_INPUT_PATH: /inputs
+  HDFS_OUTPUT_PATH: /outputs
+  HDFS_PATH: hdfs://namenode:9000/
+  HDFS_URL: http://namenode:9870
+  HDFS_USER: root
+  LOCAL_INPUT_PATH: /mnt/shared-filesystem/inputs
+  LOCAL_OUTPUT_PATH: /mnt/shared-filesystem/outputs
+  LOG_PATH: /mnt/shared-filesystem/logs/
+  REDIS_HOST: redis
+  SPARK_MASTER: spark://spark-master:7077
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: frontend-src-dev-env
+  name: src-dev-env

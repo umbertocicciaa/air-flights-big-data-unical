@@ -2,41 +2,40 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
-    kompose.cmd: kompose convert --out k8s/
+    kompose.cmd: kompose convert --file docker-compose-prod.yaml --out k8s/
     kompose.version: 1.36.0 (HEAD)
   labels:
-    io.kompose.service: app
-  name: app
+    io.kompose.service: frontend
+  name: frontend
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: app
+      io.kompose.service: frontend
   strategy:
     type: Recreate
   template:
     metadata:
       annotations:
-        kompose.cmd: kompose convert --out k8s/
+        kompose.cmd: kompose convert --file docker-compose-prod.yaml --out k8s/
         kompose.version: 1.36.0 (HEAD)
       labels:
-        io.kompose.service: app
+        io.kompose.service: frontend
     spec:
       containers:
         - envFrom:
             - configMapRef:
                 name: src-dev-env
           image: ghcr.io/umbertocicciaa/airflights:latest
-          ImagePullPolicy: Always
-          name: app
+          name: frontend
           ports:
             - containerPort: 8501
               protocol: TCP
           volumeMounts:
             - mountPath: /mnt/shared-filesystem
-              name: app-cm0
+              name: frontend-cm0
       restartPolicy: Always
       volumes:
         - configMap:
-            name: app-cm0
-          name: app-cm0
+            name: frontend-cm0
+          name: frontend-cm0
