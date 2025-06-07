@@ -65,6 +65,7 @@ services:
 
     frontend:
         image: ghcr.io/umbertocicciaa/airflights:latest
+        pull_policy: always
         container_name: frontend
         restart: always
         depends_on:
