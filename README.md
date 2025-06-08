@@ -36,6 +36,30 @@ air-flights-big-data-unical/
 
 ---
 
+## ☸️ Run with K8s
+
+### Prerequisites
+
+- [Kind Cluster](https://kind.sigs.k8s.io/)
+- [kubectl](https://kubernetes.io/docs/reference/kubectl/)
+
+### Usage
+
+```bash
+chmod u+x kind.sh
+./kind.sh
+```
+
+Or if you have a local kind cluster
+
+```bash
+kubectl -f apply k8s/
+```
+
+This will spin up all required services (Hadoop, Spark, Redis, App) automatically.
+
+---
+
 ## 🐳 Run with Docker Compose
 
 ### Prerequisites
