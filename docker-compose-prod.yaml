@@ -84,7 +84,7 @@ services:
             - ./shared-filesystem:/mnt/shared-filesystem:rw
     
     redis:
-        image: redis:latest
+        image: redis:7.4.4-alpine3.21
         restart: always
         ports:
             - 6379:6379
