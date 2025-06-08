@@ -16,3 +16,7 @@ airportsdata
 setuptools
 grpcio
 grpcio-status
+PyHive
+SQLAlchemy
+thrift
+thrift_sasl

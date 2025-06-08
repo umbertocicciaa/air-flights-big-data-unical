@@ -16,9 +16,9 @@ Analyze and visualize air traffic data at scale using a modern big data stack. T
 
 - Distributed data processing with **Apache Spark**
 - HDFS storage via **Hadoop**
+- Data warehouse storage via **Hive**
 - In-memory caching and messaging using **Redis**
-- Scalable and isolated setup via **Docker Compose**
-- Manual local setup support via `run.sh`
+- Scalable and isolated setup via **Docker Compose** or **K8S**
 
 ---
 
@@ -56,7 +56,7 @@ Or if you have a local kind cluster
 kubectl -f apply k8s/
 ```
 
-This will spin up all required services (Hadoop, Spark, Redis, App) automatically.
+This will spin up all required services (Hadoop, Hive, Spark, Redis, App) automatically.
 
 ---
 
