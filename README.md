@@ -1,58 +1,96 @@
-# Air flights big data unical
+# ✈️ Air Flights Big Data @ Unical
 
-[![Airflights](https://github.com/umbertocicciaa/air-flights-big-data-unical/actions/workflows/airflights.yml/badge.svg)](https://github.com/umbertocicciaa/air-flights-big-data-unical/actions/workflows/airflights.yml)
+[![CI - Airflights](https://github.com/umbertocicciaa/air-flights-big-data-unical/actions/workflows/airflights.yml/badge.svg)](https://github.com/umbertocicciaa/air-flights-big-data-unical/actions/workflows/airflights.yml)
 
-## Project Overview
+Analyze and visualize air traffic data at scale using a modern big data stack. This project demonstrates distributed processing with Hadoop and Spark, real-time analytics with Redis, and containerized orchestration via Docker.
 
-This project is designed to analyze and visualize air flight data using big data technologies. It includes data processing, storage, and visualization components to provide insights into various aspects of air travel.
+---
 
-## Prerequisites for running with docker
+## 📊 Demo
 
-Before running the project, ensure you have the following installed:
+![Demo](resources/demo.png)
 
-- Docker
-- Docker Compose
+---
 
-## Prerequisites for running in shell
+## 🚀 Features
 
-Before running the project, ensure you have the following installed:
+- Distributed data processing with **Apache Spark**
+- HDFS storage via **Hadoop**
+- In-memory caching and messaging using **Redis**
+- Scalable and isolated setup via **Docker Compose**
+- Manual local setup support via `run.sh`
 
-- Pytho 3.x
-- Redis
-- Spark
-- Hadoop
-- Java JDK
+---
 
-## Installation
+## 🧱 Project Structure
 
-Clone the repository:
-
-```sh
-git clone https://github.com/umbertocicciaa/air-flights-big-data-unical.git
-cd air-flights-big-data-unical
+```
+air-flights-big-data-unical/
+├── src/                    # Application code and environment settings
+├── run.sh                  # Script for local (non-Docker) execution
+├── docker-compose.yml      # Multi-service Docker configuration (DEV)
+├── docker-compose-prod.yml # Multi-service Docker configuration (PROD)
+├── src/Dockerfile          # Base image for application container
+└── resources/              # Static assets and demo images
 ```
 
-## Usage in local
+---
 
-To run the project locally:
+## 🐳 Run with Docker Compose
 
-```sh
-# change java home in src/local.env with jdk8 or jdk11
+### Prerequisites
+
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/)
+
+### Usage
+
+```bash
+docker compose up --build
+```
+
+This will spin up all required services (Hadoop, Spark, Redis, App) automatically.
+
+---
+
+## 💻 Run Locally (Manual Setup)
+
+### Prerequisites
+
+- Python 3.x
+- Redis
+- Apache Spark
+- Apache Hadoop
+- Java JDK (8 or 11)
+
+### Steps
+
+```bash
+# Clone the repository
+git clone https://github.com/umbertocicciaa/air-flights-big-data-unical.git
+cd air-flights-big-data-unical
+
+# Set JAVA_HOME in src/local.env to your JDK 8 or 11 path
+# Example: JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+
+# Make script executable and run
 chmod u+x run.sh
 ./run.sh
 ```
 
-## Usage with docker compose
+---
 
-To run the project locally, using Docker Compose:
+## 🧪 Dev Notes & Resources
 
-```sh
-docker compose up
-```
-<!--
-## Local installation hadoop and spark
+> Optional: Only for manual setup or troubleshooting on local environments.
 
-Utilies urls.
-<https://medium.com/@MinatoNamikaze02/installing-hadoop-on-macos-m1-m2-2023-d963abeab38e>
-<https://medium.com/@le.oasis/setting-up-apache-spark-on-macos-a-comprehensive-guide-78af7642deb1>
--->
+- [Installing Hadoop on macOS M1/M2 – Medium Guide](https://medium.com/@MinatoNamikaze02/installing-hadoop-on-macos-m1-m2-2023-d963abeab38e)
+- [Setting up Apache Spark on macOS – Medium Guide](https://medium.com/@le.oasis/setting-up-apache-spark-on-macos-a-comprehensive-guide-78af7642deb1)
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+---
