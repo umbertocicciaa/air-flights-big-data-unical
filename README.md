@@ -70,7 +70,7 @@ This will spin up all required services (Hadoop, Hive, Spark, Redis, App) automa
 ### Usage
 
 ```bash
-docker compose up --build
+docker compose -f docker-compose-prod.yaml
 ```
 
 This will spin up all required services (Hadoop, Spark, Redis, App) automatically.
@@ -101,15 +101,6 @@ cd air-flights-big-data-unical
 chmod u+x run.sh
 ./run.sh
 ```
-
----
-
-## 🧪 Dev Notes & Resources
-
-> Optional: Only for manual setup or troubleshooting on local environments.
-
-- [Installing Hadoop on macOS M1/M2 – Medium Guide](https://medium.com/@MinatoNamikaze02/installing-hadoop-on-macos-m1-m2-2023-d963abeab38e)
-- [Setting up Apache Spark on macOS – Medium Guide](https://medium.com/@le.oasis/setting-up-apache-spark-on-macos-a-comprehensive-guide-78af7642deb1)
 
 ---
 
