@@ -42,6 +42,7 @@ air-flights-big-data-unical/
 
 - Kubernetes Cluster
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/)
+- Dataset provided by the instructor
 
 ### Usage
 
@@ -67,6 +68,7 @@ chmod u+x install_cluster.sh
 
 - [Docker](https://www.docker.com/)
 - [Docker Compose](https://docs.docker.com/compose/)
+- Dataset provided by the instructor
 
 ### Usage
 
@@ -87,16 +89,14 @@ This will spin up all required services (Hadoop, Spark, Redis, App) automaticall
 - Apache Spark
 - Apache Hadoop
 - Java JDK (8 or 11)
+- Dataset provided by the instructor
 
 ### Steps
 
 ```bash
-# Clone the repository
-git clone https://github.com/umbertocicciaa/air-flights-big-data-unical.git
-cd air-flights-big-data-unical
-
 # Set JAVA_HOME in src/local.env to your JDK 8 or 11 path
-# Example: JAVA_HOME=/usr/lib/jvm/java-11-openjdk
+# Example: 
+JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 
 # Make script executable and run
 chmod u+x run_local.sh
