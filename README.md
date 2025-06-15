@@ -40,23 +40,24 @@ air-flights-big-data-unical/
 
 ### Prerequisites
 
-- [Kind Cluster](https://kind.sigs.k8s.io/)
+- Kubernetes Cluster
 - [kubectl](https://kubernetes.io/docs/reference/kubectl/)
 
 ### Usage
 
-```bash
-chmod u+x kind.sh
-./kind.sh
-```
-
-Or if you have a local kind cluster
-
-```bash
-kubectl -f apply k8s/
-```
-
 This will spin up all required services (Hadoop, Hive, Spark, Redis, App) automatically.
+
+```bash
+chmod u+x install_cluster.sh
+./install_cluster.sh install
+```
+
+Withot install input you destroy the namespace
+
+```bash
+chmod u+x install_cluster.sh
+./install_cluster.sh
+```
 
 ---
 
@@ -98,8 +99,8 @@ cd air-flights-big-data-unical
 # Example: JAVA_HOME=/usr/lib/jvm/java-11-openjdk
 
 # Make script executable and run
-chmod u+x run.sh
-./run.sh
+chmod u+x run_local.sh
+./run_local.sh
 ```
 
 ---
