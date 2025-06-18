@@ -1,6 +1,7 @@
 from pyspark.ml.evaluation import MulticlassClassificationEvaluator
 from pyspark.sql import DataFrame
 from pyspark.sql.functions import col, lpad
+from logs.logger import logger
 
 selected_columns = [
     "Quarter", "Month", "DayofMonth", "DayOfWeek", "OriginStateName",
@@ -48,12 +49,12 @@ def evaluate_model_performance(df: DataFrame):
                                                          metricName="weightedRecall")
     recall = recall_evaluator.evaluate(df)
 
-    print("Confusion Matrix:")
-    print(f"[[{TN}, {FP}],")
-    print(f" [{FN}, {TP}]]")
-    print(f"Accuracy: {accuracy}")
-    print(f"F1-score: {f1_score}")
-    print(f"Precision: {precision}")
-    print(f"Recall: {recall}")
+    logger.info("Confusion Matrix:")
+    logger.info(f"[[{TN}, {FP}],")
+    logger.info(f" [{FN}, {TP}]]")
+    logger.info(f"Accuracy: {accuracy}")
+    logger.info(f"F1-score: {f1_score}")
+    logger.info(f"Precision: {precision}")
+    logger.info(f"Recall: {recall}")
 
     return confusion_matrix_array, accuracy, f1_score, precision, recall

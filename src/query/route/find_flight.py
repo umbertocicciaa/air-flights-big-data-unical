@@ -1,15 +1,14 @@
 import datetime
 
 from pyspark.sql import DataFrame
+from logs.logger import logger
 
-
-def get_flight(df: DataFrame, data: datetime.date, origine: str, destinazione: str, ora: datetime.time) -> DataFrame:
-    ora_str = ora.strftime("%H%M")
-    print(data, ora_str)
-    voliFiltrati = df.filter(df["FlightDate"] == data) \
+def get_flight(df: DataFrame, data: datetime.date, origine: str, destinazione: str) -> DataFrame:
+    data_str = data.strftime("%Y-%m-%d")
+    logger.info(f"Data {data_str}, per il volo da {origine} a {destinazione}")
+    voliFiltrati = df.filter(df["FlightDate"] == data_str) \
         .filter(df["OriginCityName"] == origine) \
-        .filter(df["DestCityName"] == destinazione) \
-        .filter(df["CRSDepTime"] == ora_str)
+        .filter(df["DestCityName"] == destinazione)
 
     return voliFiltrati.select("Origin", "Dest", "Distance", "Flight_Number_Reporting_Airline", "CRSDepTime",
                                "DepTime", "DepDelay", "CRSArrTime", "ArrTime", "ArrDelay", "ArrDelayMinutes",

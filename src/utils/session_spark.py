@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession
 def create_session():
     spark_master = os.getenv('SPARK_MASTER', 'spark://spark-master:7077')
     
-    app_name = os.getenv('SPARK_APP_NAME', 'CSV to Parquet')
+    app_name = os.getenv('SPARK_APP_NAME', 'Spark Context')
     conf = SparkConf()
     
     conf.set("spark.hadoop.fs.defaultFS", "hdfs://namenode:9000")
@@ -18,7 +18,7 @@ def create_session():
     conf.set("spark.hadoop.security.authorization", "false")
     
     conf.set("spark.driver.memory", "8g")
-    conf.set("spark.executor.memory", "4g")
+    conf.set("spark.executor.memory", "6g")
     
     spark = (SparkSession.builder
              .appName(app_name)

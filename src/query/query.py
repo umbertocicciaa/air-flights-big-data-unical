@@ -48,8 +48,8 @@ def query_citta_numvoli_aeroporto(citta : str):
     return city_flight_airport(build_all_dataframe(), citta)
 
 
-def query_get_volo(data, origine, destinazione, ora):
-    return get_flight(build_all_dataframe(),data,origine,destinazione,ora)
+def query_get_volo(data, origine, destinazione):
+    return get_flight(build_all_dataframe(),data,origine,destinazione)
 
 
 def query_mesi_stato_voli():

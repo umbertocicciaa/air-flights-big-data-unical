@@ -1,3 +1,4 @@
+from sys import exception
 from pyspark.ml import Pipeline
 from pyspark.ml.classification import RandomForestClassifier
 from pyspark.ml.feature import StringIndexer, VectorAssembler
@@ -37,9 +38,12 @@ def train_random_forest_model(df: DataFrame):
 
     model = pipeline.fit(train_df)
 
-    model_bytes = pickle.dumps(model)
-    redis_client.set("random_forest_model", model_bytes)
-
+    try:
+        model_bytes = pickle.dumps(model)
+        redis_client.set("random_forest_model", model_bytes)
+    except Exception as e:
+        print("Error saving model to Redis:", e)
+    
     result_df = model.transform(test_df)
 
     result_df.select("prediction", "target", "features").show()

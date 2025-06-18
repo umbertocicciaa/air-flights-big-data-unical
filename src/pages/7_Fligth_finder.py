@@ -10,7 +10,7 @@ from pyspark.sql.types import Row
 from query.query import query_get_volo
 from query.route.find_flight import get_flight_advanced_delay, get_flight_advanced_canc, get_flight_advanced_div
 from utils.utils import get_coordinates_city, get_sorted_city_list
-
+from logs.logger import logger
 
 def build_map(origin_par: str, destinazione: str):
     origin = get_coordinates_city(origin_par)
@@ -176,8 +176,7 @@ def create_select_button(city: list):
     origine = st.selectbox("Choose origin", city, index=None)
     dest = st.selectbox("Choose destination", city, index=None)
     data = st.date_input("Enter departure date", date(2013, 1, 1))
-    orario = st.time_input("Departure time", time(0, 0))
-    return origine, dest, data, orario
+    return origine, dest, data
 
 
 def create_optinal_choose():
@@ -225,23 +224,24 @@ st.title(":blue[START HERE]")
 
 city = get_sorted_city_list()
 
-origine, dest, data, orario = create_select_button(city)
+origine, dest, data = create_select_button(city)
 
 senza_ritardo, senza_cancellazioni, senza_dirottamenti = create_optinal_choose()
-print(senza_ritardo, senza_cancellazioni, senza_dirottamenti)
+logger.info(f"Senza ritardo {senza_ritardo}, senza cancellazioni {senza_cancellazioni}, Senza dirottamenti {senza_dirottamenti}")
 ricerca = False
 if origine is not None and dest is not None:
     ricerca = st.button("FIND")
 
 if ricerca and origine is not None and dest is not None:
     st.markdown(f"### :blue[Flight Path: {origine} ➡️ {dest}]")
-    build_map(origine, dest)
     st.markdown("# :blue[Flight information]")
-    voli = query_get_volo(data, origine, dest, orario)
+    logger.info(f"Searching flights for {data} from {origine} to {dest}")
+    voli = query_get_volo(data, origine, dest)
     if senza_ritardo:
         voli = get_flight_advanced_delay(voli)
     if senza_cancellazioni:
         voli = get_flight_advanced_canc(voli)
     if senza_dirottamenti:
         voli = get_flight_advanced_div(voli)
+    build_map(origine, dest)
     visualizza_informazioni(voli)
